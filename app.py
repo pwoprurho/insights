@@ -1,18 +1,40 @@
 import os
 import uuid
+import sys
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from google import genai
-from db import get_supabase
-from booking_data import save_booking, load_bookings
 
-print("Starting application initialization...")
-load_dotenv()
-print("Environment variables loaded.")
+# Ensure logs are visible immediately
+def log(msg):
+    print(f"DEBUG: {msg}", file=sys.stderr)
+    sys.stderr.flush()
 
-app = Flask(__name__)
-print("Flask app instance created.")
-app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')  # Needed for flash messages
+try:
+    log("Starting application initialization...")
+    load_dotenv()
+    log("Environment variables loaded.")
+
+    from google import genai
+    from db import get_supabase
+    from booking_data import save_booking, load_bookings
+    log("Internal modules imported.")
+
+    app = Flask(__name__)
+    log("Flask app instance created.")
+    
+    # Use a safe fallback for the secret key
+    raw_secret = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+    if "os.secret_hex" in raw_secret:
+        log("Warning: SECRET_KEY in env seems to be a code snippet, using default.")
+        app.secret_key = "development_secret_key_fallback"
+    else:
+        app.secret_key = raw_secret
+
+except Exception as e:
+    log(f"CRITICAL ERROR DURING INITIALIZATION: {e}")
+    import traceback
+    log(traceback.format_exc())
+    raise
 
 # Initialize Gemini Client
 # The client automatically picks up GEMINI_API_KEY from the environment
