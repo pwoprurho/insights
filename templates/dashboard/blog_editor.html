@@ -1,0 +1,546 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% block page_title %}Create New Post{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .image-upload-zone {
+        border: 2px dashed rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        position: relative;
+    }
+
+    .image-upload-zone:hover,
+    .image-upload-zone.drag-over {
+        border-color: var(--primary-color);
+        background: rgba(2, 175, 241, 0.05);
+    }
+
+    .image-upload-zone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .image-preview-card {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .image-preview-card img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+    }
+
+    .image-preview-card .remove-img {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(220, 53, 69, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .image-preview-card .remove-img:hover {
+        transform: scale(1.1);
+    }
+
+    .upload-progress {
+        height: 4px;
+        border-radius: 2px;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-progress .bar {
+        height: 100%;
+        background: var(--primary-color);
+        transition: width 0.3s ease;
+    }
+
+    .position-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: #f8f9fa;
+    }
+
+    .position-option:hover {
+        background: #e9ecef;
+    }
+
+    .position-option.selected {
+        border-color: var(--primary-color);
+        background: rgba(2, 175, 241, 0.08);
+    }
+
+    .position-option i {
+        font-size: 1.2rem;
+        color: var(--primary-color);
+    }
+
+    .inline-images-list {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .inline-image-thumb {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .inline-image-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .inline-image-thumb .insert-btn {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+        cursor: pointer;
+        font-size: 0.75rem;
+    }
+
+    .inline-image-thumb:hover .insert-btn {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="dashboard-card mb-4">
+            <form id="blogForm">
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Post Title</label>
+                    <input type="text" class="form-control form-control-lg" id="blogTitle"
+                        placeholder="Enter title here..." required>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label fw-bold mb-0">Content</label>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-success" id="btnInsertImage"
+                                title="Insert image at cursor position" disabled>
+                                <i class="bi bi-image me-1"></i> Insert Image
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#aiModal">
+                                <i class="bi bi-magic me-1"></i> Generate with Gemini
+                            </button>
+                        </div>
+                    </div>
+                    <textarea class="form-control" id="blogContent" rows="18"
+                        placeholder="Start writing or use AI to generate a draft..." required></textarea>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary" id="btnDraft">Save as Draft</button>
+                    <button type="button" class="btn btn-primary px-4" id="btnPublish">
+                        <i class="bi bi-send me-1"></i> Publish Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Featured Image Upload -->
+        <div class="dashboard-card mb-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-card-image me-2"></i>Featured Image</h6>
+
+            <div id="featuredUploadZone" class="image-upload-zone mb-3">
+                <input type="file" id="featuredImageInput" accept="image/*">
+                <i class="bi bi-cloud-arrow-up fs-2 text-muted d-block mb-2"></i>
+                <p class="mb-1 fw-bold text-muted">Drag & drop or click to upload</p>
+                <small class="text-muted">PNG, JPG, GIF, WebP (max 5MB)</small>
+            </div>
+
+            <div id="featuredUploadProgress" class="upload-progress d-none mb-3">
+                <div class="bar" style="width: 0%"></div>
+            </div>
+
+            <div id="featuredPreview" class="image-preview-card d-none mb-3">
+                <img id="featuredPreviewImg" src="" alt="Featured image preview">
+                <button class="remove-img" id="removeFeaturedImg" title="Remove image">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <input type="hidden" id="featuredImageUrl" value="">
+
+            <!-- Image Position -->
+            <h6 class="fw-bold mb-2 mt-3"><i class="bi bi-arrows-move me-2"></i>Image Position</h6>
+            <div class="d-flex flex-column gap-2">
+                <div class="position-option selected" data-position="top">
+                    <i class="bi bi-arrow-up-square"></i>
+                    <span>Top of post</span>
+                </div>
+                <div class="position-option" data-position="inline">
+                    <i class="bi bi-layout-text-window-reverse"></i>
+                    <span>Inline with content</span>
+                </div>
+                <div class="position-option" data-position="background">
+                    <i class="bi bi-aspect-ratio"></i>
+                    <span>Background banner</span>
+                </div>
+            </div>
+            <input type="hidden" id="imagePosition" value="top">
+        </div>
+
+        <!-- Inline Image Gallery -->
+        <div class="dashboard-card mb-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-images me-2"></i>Content Images</h6>
+            <p class="text-muted small mb-3">Upload images to insert inline within your post content.</p>
+
+            <div id="inlineUploadZone" class="image-upload-zone mb-3" style="padding: 15px;">
+                <input type="file" id="inlineImageInput" accept="image/*" multiple>
+                <i class="bi bi-plus-circle fs-4 text-muted d-block mb-1"></i>
+                <small class="text-muted">Add content images</small>
+            </div>
+
+            <div id="inlineUploadProgress" class="upload-progress d-none mb-3">
+                <div class="bar" style="width: 0%"></div>
+            </div>
+
+            <div id="inlineImageGallery" class="inline-images-list">
+                <!-- Uploaded inline images will appear here -->
+            </div>
+        </div>
+
+        <!-- Post Settings -->
+        <div class="dashboard-card">
+            <h6 class="fw-bold mb-3"><i class="bi bi-gear me-2"></i>Settings</h6>
+            <div class="mb-3">
+                <label class="form-label">Slug</label>
+                <input type="text" class="form-control" id="blogSlug" placeholder="auto-generated-from-title">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Generation Modal -->
+<div class="modal fade" id="aiModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Generate with Gemini AI</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">What should the blog post be about?</label>
+                    <textarea class="form-control" id="aiTopic" rows="3"
+                        placeholder="e.g. The importance of strategic positioning for SMEs in 2026"></textarea>
+                </div>
+                <div id="aiLoading" class="text-center d-none my-3">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2 text-primary">Gemini is drafting your post...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnGenerate">Generate Draft</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // === Elements ===
+        const featuredInput = document.getElementById('featuredImageInput');
+        const featuredZone = document.getElementById('featuredUploadZone');
+        const featuredProgress = document.getElementById('featuredUploadProgress');
+        const featuredPreview = document.getElementById('featuredPreview');
+        const featuredPreviewImg = document.getElementById('featuredPreviewImg');
+        const removeFeaturedBtn = document.getElementById('removeFeaturedImg');
+        const featuredImageUrl = document.getElementById('featuredImageUrl');
+        const imagePosition = document.getElementById('imagePosition');
+        const positionOptions = document.querySelectorAll('.position-option');
+
+        const inlineInput = document.getElementById('inlineImageInput');
+        const inlineZone = document.getElementById('inlineUploadZone');
+        const inlineProgress = document.getElementById('inlineUploadProgress');
+        const inlineGallery = document.getElementById('inlineImageGallery');
+        const btnInsertImage = document.getElementById('btnInsertImage');
+
+        const blogTitle = document.getElementById('blogTitle');
+        const blogContent = document.getElementById('blogContent');
+        const blogSlug = document.getElementById('blogSlug');
+        const btnDraft = document.getElementById('btnDraft');
+        const btnPublish = document.getElementById('btnPublish');
+
+        const btnGenerate = document.getElementById('btnGenerate');
+        const aiTopic = document.getElementById('aiTopic');
+        const aiLoading = document.getElementById('aiLoading');
+        const aiModalEl = document.getElementById('aiModal');
+        const aiModal = new bootstrap.Modal(aiModalEl);
+
+        let inlineImages = []; // Store uploaded inline image URLs
+        let selectedInlineImage = null;
+
+        // === Image Position Selection ===
+        positionOptions.forEach(opt => {
+            opt.addEventListener('click', function () {
+                positionOptions.forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                imagePosition.value = this.dataset.position;
+            });
+        });
+
+        // === Drag & Drop Styling ===
+        [featuredZone, inlineZone].forEach(zone => {
+            zone.addEventListener('dragenter', () => zone.classList.add('drag-over'));
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('dragover', (e) => e.preventDefault());
+            zone.addEventListener('drop', () => zone.classList.remove('drag-over'));
+        });
+
+        // === Featured Image Upload ===
+        featuredInput.addEventListener('change', async function () {
+            if (this.files.length === 0) return;
+            const file = this.files[0];
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be under 5MB');
+                return;
+            }
+            await uploadImage(file, 'featured');
+        });
+
+        removeFeaturedBtn.addEventListener('click', function () {
+            featuredPreview.classList.add('d-none');
+            featuredZone.classList.remove('d-none');
+            featuredImageUrl.value = '';
+            featuredPreviewImg.src = '';
+        });
+
+        // === Inline Image Upload ===
+        inlineInput.addEventListener('change', async function () {
+            for (const file of this.files) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`${file.name} is too large (max 5MB). Skipping.`);
+                    continue;
+                }
+                await uploadImage(file, 'inline');
+            }
+            this.value = ''; // Reset input
+        });
+
+        // === Core Upload Function ===
+        async function uploadImage(file, type) {
+            const progressBar = type === 'featured' ? featuredProgress : inlineProgress;
+            const bar = progressBar.querySelector('.bar');
+
+            progressBar.classList.remove('d-none');
+            bar.style.width = '30%';
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                bar.style.width = '60%';
+                const response = await fetch('/dashboard/blogs/upload-image', {
+                    method: 'POST',
+                    body: formData
+                });
+                bar.style.width = '90%';
+                const data = await response.json();
+
+                if (response.ok) {
+                    bar.style.width = '100%';
+
+                    if (type === 'featured') {
+                        featuredImageUrl.value = data.url;
+                        featuredPreviewImg.src = data.url;
+                        featuredPreview.classList.remove('d-none');
+                        featuredZone.classList.add('d-none');
+                    } else {
+                        inlineImages.push(data.url);
+                        addInlineThumbnail(data.url);
+                        btnInsertImage.disabled = false;
+                    }
+
+                    setTimeout(() => progressBar.classList.add('d-none'), 500);
+                } else {
+                    alert('Upload error: ' + (data.error || 'Unknown error'));
+                    progressBar.classList.add('d-none');
+                }
+            } catch (error) {
+                console.error('Upload failed:', error);
+                alert('Network error during upload.');
+                progressBar.classList.add('d-none');
+            }
+            bar.style.width = '0%';
+        }
+
+        // === Add Inline Image Thumbnail ===
+        function addInlineThumbnail(url) {
+            const thumb = document.createElement('div');
+            thumb.className = 'inline-image-thumb';
+            thumb.innerHTML = `
+            <img src="${url}" alt="Uploaded image">
+            <div class="insert-btn" title="Click to insert into content">
+                <i class="bi bi-plus-lg"></i> Insert
+            </div>
+        `;
+            thumb.querySelector('.insert-btn').addEventListener('click', function () {
+                insertImageAtCursor(url);
+            });
+            inlineGallery.appendChild(thumb);
+        }
+
+        // === Insert Image at Cursor ===
+        function insertImageAtCursor(url) {
+            const textarea = blogContent;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const imageMarkdown = `\n![Image](${url})\n`;
+
+            textarea.value = text.substring(0, start) + imageMarkdown + text.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + imageMarkdown.length;
+        }
+
+        // === Insert Image Button (inserts the last uploaded inline image) ===
+        btnInsertImage.addEventListener('click', function () {
+            if (inlineImages.length > 0) {
+                insertImageAtCursor(inlineImages[inlineImages.length - 1]);
+            }
+        });
+
+        // === Auto-generate Slug ===
+        blogTitle.addEventListener('input', function () {
+            if (!blogSlug.dataset.manual) {
+                blogSlug.value = this.value.toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .substring(0, 60);
+            }
+        });
+        blogSlug.addEventListener('input', function () {
+            this.dataset.manual = 'true';
+        });
+
+        // === Save Blog (Draft or Publish) ===
+        async function saveBlog(published) {
+            const title = blogTitle.value.trim();
+            const content = blogContent.value.trim();
+            if (!title || !content) {
+                alert('Please enter a title and content.');
+                return;
+            }
+
+            const payload = {
+                title: title,
+                content: content,
+                slug: blogSlug.value.trim(),
+                featured_image: featuredImageUrl.value,
+                image_position: imagePosition.value,
+                published: published
+            };
+
+            try {
+                const btn = published ? btnPublish : btnDraft;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
+
+                const response = await fetch('/dashboard/blogs/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href = '/dashboard/blogs';
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to save'));
+                }
+            } catch (error) {
+                alert('Network error while saving.');
+            } finally {
+                btnDraft.disabled = false;
+                btnDraft.innerHTML = 'Save as Draft';
+                btnPublish.disabled = false;
+                btnPublish.innerHTML = '<i class="bi bi-send me-1"></i> Publish Post';
+            }
+        }
+
+        btnDraft.addEventListener('click', () => saveBlog(false));
+        btnPublish.addEventListener('click', () => saveBlog(true));
+
+        // === AI Generation ===
+        btnGenerate.addEventListener('click', async function () {
+            const topic = aiTopic.value.trim();
+            if (!topic) return alert("Please enter a topic.");
+
+            aiLoading.classList.remove('d-none');
+            btnGenerate.disabled = true;
+
+            try {
+                const response = await fetch('/dashboard/blogs/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic: topic })
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    blogContent.value = data.content;
+                    aiModal.hide();
+                    aiTopic.value = '';
+                } else {
+                    alert("Error: " + (data.error || "Failed to generate content"));
+                }
+            } catch (error) {
+                console.error("AI Generation Error:", error);
+                alert("Network error while reaching Gemini.");
+            } finally {
+                aiLoading.classList.add('d-none');
+                btnGenerate.disabled = false;
+            }
+        });
+    });
+</script>
+{% endblock %}

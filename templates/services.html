@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Our Services - Insight Collective{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Insight Collective Logo" class="hero-logo">
+        <h1 class="hero-title">Our Core Services</h1>
+        <div class="catchphrase">Think better, position smarter, build sustainably</div>
+        <p class="hero-desc">We help organisations translate ambition into Structured, Scalable Execution.
+        </p>
+    </div>
+</section>
+
+<section class="container my-5">
+    <h2 class="section-title">What We Offer</h2>
+    <div class="row g-4">
+        <!-- Brand Strategy -->
+        <div class="col-md-4">
+            <div class="glass-card h-100">
+                <img src="https://placehold.co/600x400?text=Brand+Strategy" class="img-fluid rounded-4 mb-3"
+                    alt="Brand Strategy">
+                <h5 class="text-primary fw-bold">Brand Strategy & Positioning</h5>
+                <p>We help businesses define their strategic identity, aligning vision, values, and voice so that they
+                    can execute with clarity and confidence.</p>
+            </div>
+        </div>
+        <!-- Research -->
+        <div class="col-md-4">
+            <div class="glass-card h-100">
+                <img src="https://placehold.co/600x400?text=Research" class="img-fluid rounded-4 mb-3" alt="Research">
+                <h5 class="text-primary fw-bold">Research & Insight Analysis</h5>
+                <p>Most Organisations make decisions based on activity and trends. We help you make data-driven
+                    decisions that makes
+                    you the trendsetter.</p>
+            </div>
+        </div>
+        <!-- Consulting -->
+        <div class="col-md-4">
+            <div class="glass-card h-100">
+                <img src="https://placehold.co/600x400?text=Consulting" class="img-fluid rounded-4 mb-3"
+                    alt="Strategic Consulting">
+                <h5 class="text-primary fw-bold">Strategic Advisory</h5>
+                <p>The chasm between conceptual vision and operational reality is where most organisational momentum is
+                    lost. We provide the bridge to ensure your next era of growth is structured and sustainable.</p>
+            </div>
+        </div>
+        <!-- Systems Design -->
+        <div class="col-md-4">
+            <div class="glass-card h-100">
+                <img src="https://placehold.co/600x400?text=Systems" class="img-fluid rounded-4 mb-3"
+                    alt="Systems Design">
+                <h5 class="text-primary fw-bold">Systems & Solution Design</h5>
+                <p>Based on research findings, we help design practical systems that solve real problems. Includes
+                    operational frameworks and strategy-to-execution structures.</p>
+            </div>
+        </div>
+        <!-- Digital Strategy -->
+        <div class="col-md-4">
+            <div class="glass-card h-100">
+                <img src="https://placehold.co/600x400?text=Digital+Strategy" class="img-fluid rounded-4 mb-3"
+                    alt="Digital Strategy">
+                <h5 class="text-primary fw-bold">Digital & Media Strategy</h5>
+                <p>We approach digital presence strategically. Includes digital positioning strategy, content direction,
+                    and platform-specific advisory.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

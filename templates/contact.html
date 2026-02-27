@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Insight Collective{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">Contact Us</h1>
+        <div class="catchphrase">Position smarter, build sustainably</div>
+        <p class="hero-desc">Get in touch with Insight Collective. Find our contact details below.</p>
+    </div>
+</section>
+
+<section class="container my-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="glass-card h-100">
+                <h2 class="section-title text-start mb-4">Get in Touch</h2>
+                <ul class="contact-text list-unstyled">
+                    <li class="mb-3">
+                        <i class="bi bi-telephone-fill text-primary me-2"></i>
+                        <strong>Phone:</strong> <span class="text-muted">+2348034126079</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-envelope-fill text-primary me-2"></i>
+                        <strong>Email:</strong> <span class="text-muted">info@insightcollective.com</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                        <strong>Address:</strong> <span class="text-muted">Say Plaza, suit S3a, Utako. Abuja</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-clock-fill text-primary me-2"></i>
+                        <strong>Business Hours:</strong> <span class="text-muted">Mon-Fri: 8am - 6pm</span>
+                    </li>
+                </ul>
+                <div class="mt-4 text-center">
+                    <a href="/booking" class="btn btn-primary">Book a Consultation</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="glass-card h-100 p-0 overflow-hidden">
+                <iframe src="https://www.google.com/maps?q=Say+Plaza,+Utako,+Abuja&output=embed" width="100%"
+                    height="100%" style="border:0; min-height: 400px;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

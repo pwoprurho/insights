@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Insight Collective{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block extra_styles %}{% endblock %}
+</head>
+
+<body>
+    <div id="bg-canvas"></div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo">
+                Insight Collective
+            </a>
+            <button class="navbar-toggler btn-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/booking">Strategic Engagement</a></li>
+                    {% if session.get('logged_in') %}
+                    <li class="nav-item"><a class="nav-link" href="/view-bookings">Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo-container mb-4">
+                <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Insight Collective Logo"
+                    class="footer-logo">
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h5>Insight Collective</h5>
+                    <p class="opacity-75">Think better, position smarter, build sustainably.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5>Contact Us</h5>
+                    <p class="opacity-75 mb-1">Say Plaza, suit S3a, Utako. Abuja</p>
+                    <p class="opacity-75 mb-1"><a
+                            href="mailto:info@insightcollective.com">info@insightcollective.com</a></p>
+                    <p class="opacity-75"><a href="tel:+2348034126079">+2348034126079</a></p>
+                </div>
+            </div>
+            <div class="footer-social-icons my-4">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-twitter-x"></i></a>
+            </div>
+            <hr class="opacity-25 my-4">
+            <p class="opacity-75">&copy; {{ 2026 }} • Insight Collective. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- AI Floating Widget -->
+    <div class="ai-widget-container">
+        <!-- Chat Window -->
+        <div class="ai-chat-window d-none" id="aiChatWindow">
+            <div class="ai-chat-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-robot me-2"></i>Insight AI</span>
+                <button class="btn-close btn-close-white" id="closeAiChat"></button>
+            </div>
+            <div class="ai-chat-body" id="aiChatBody">
+                <div class="ai-message ai-received">
+                    Hello! I'm Insight AI. How can I assist you with your strategy or system architecture today?
+                </div>
+            </div>
+            <div class="ai-chat-input d-flex">
+                <input type="text" class="form-control" placeholder="Ask AI..." id="aiInput">
+                <button class="btn btn-primary ms-2" id="sendAiBtn"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+
+        <!-- Floating Button -->
+        <button class="ai-floating-btn" id="aiFloatingBtn">
+            <i class="bi bi-stars"></i>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/background-3d.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

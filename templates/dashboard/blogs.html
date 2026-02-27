@@ -1,0 +1,60 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% block page_title %}Blog Posts{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="dashboard-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="mb-0">All Posts</h5>
+                <a href="{{ url_for('new_blog') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Create New Post
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Created At</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in blogs %}
+                        <tr>
+                            <td>{{ post.created_at[:10] }}</td>
+                            <td class="fw-bold">{{ post.title }}</td>
+                            <td>
+                                {% if post.published %}
+                                <span class="badge bg-success rounded-pill px-3">Published</span>
+                                {% else %}
+                                <span class="badge bg-secondary rounded-pill px-3">Draft</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary"><i
+                                            class="bi bi-pencil"></i></a>
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <i class="bi bi-journal-x d-block mb-3 fs-1 text-light"></i>
+                                No blog posts found. Click "Create New Post" to start.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

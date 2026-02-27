@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed - Insight Collective{% endblock %}
+
+{% block content %}
+<section class="container my-5 py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="glass-card text-center">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                </div>
+                <h2 class="section-title">Booking Confirmed!</h2>
+                <div class="confirmation-details my-4 fs-5">
+                    <p>Thank you, <strong>{{ name }}</strong>, for booking with Insight Collective.</p>
+                    <div class="bg-light p-4 rounded-4 text-start mb-4 border">
+                        <p class="mb-2"><strong>Service:</strong> {{ service }}</p>
+                        <p class="mb-2"><strong>Date:</strong> {{ date }}</p>
+                        <p class="mb-0 text-muted small"><i class="bi bi-info-circle me-1"></i> A confirmation email
+                            will be sent to <strong>{{ email }}</strong>.</p>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="/" class="btn btn-primary btn-lg">Return to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

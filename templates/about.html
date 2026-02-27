@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Insight Collective{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">About Insight Collective</h1>
+        <div class="catchphrase">Deep thinking, evidence-based insight</div>
+        <p class="hero-desc">We work at the intersection of research, strategy, branding, and systems, helping our
+            clients move from confusion to clarity and from ideas to structured execution.</p>
+    </div>
+</section>
+
+<section class="container my-5">
+    <div class="glass-card">
+        <h2 class="section-title">Who We Are</h2>
+        <div class="about-text text-center">
+            <p>The Insight Collective is a strategy-led consulting and research outfit focused on helping individuals,
+                startups, and organizations think better, position smarter, and build sustainably. Our approach is not
+                trend-driven or surface-level. We prioritize deep thinking, evidence-based insight, and long-term value
+                creation.</p>
+        </div>
+    </div>
+</section>
+
+<section class="container my-5 pb-5">
+    <h2 class="section-title">Our Team</h2>
+    <div class="row justify-content-center g-4">
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='image/enny.png') }}" alt="Amure Eniola Christianah"
+                class="team-img">
+            <div class="mt-2">
+                <h5 class="mb-0">Amure Eniola Christianah</h5>
+                <p class="text-primary fw-bold">Team Lead/CEO</p>
+                <span class="text-muted">Insight Collective</span>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='image/Suliat.png') }}" alt="Raji Fadeshewa Suliat"
+                class="team-img">
+            <div class="mt-2">
+                <h5 class="mb-0">Raji Fadeshewa Suliat</h5>
+                <p class="text-primary fw-bold">Brand Strategy and Communication Lead</p>
+                <span class="text-muted">Insight Collective</span>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='image/rurho.png') }}" alt="Oghenerurho Akpojotor" class="team-img">
+            <div class="mt-2">
+                <h5 class="mb-0">Oghenerurho Akpojotor</h5>
+                <p class="text-primary fw-bold">Chief Strategic Executioner</p>
+                <span class="text-muted">Insight Collective</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

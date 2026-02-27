@@ -1,0 +1,63 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <!-- Stat Cards -->
+    <div class="col-md-4">
+        <div class="dashboard-card border-left-primary">
+            <h6 class="text-muted text-uppercase mb-2">Total Bookings</h6>
+            <h2 class="mb-0">{{ bookings|length }}</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dashboard-card border-left-success">
+            <h6 class="text-muted text-uppercase mb-2">Total Blogs</h6>
+            <h2 class="mb-0 text-success">0</h2>
+            <small class="text-muted">Will implement later</small>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Bookings Table -->
+    <div class="col-12">
+        <div class="dashboard-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="mb-0">Recent Consultation Requests</h5>
+                <a href="{{ url_for('view_bookings') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date Request</th>
+                            <th>Name</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in recent_bookings %}
+                        <tr>
+                            <td>{{ booking.date }}</td>
+                            <td class="fw-bold">{{ booking.name }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ booking.service }}</span></td>
+                            <td>
+                                <span class="badge bg-warning rounded-pill px-3">{{ booking.status }}</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No recent bookings found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
