@@ -7,9 +7,6 @@ load_dotenv()
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_cors import CORS
-from google import genai
-from supabase_client import supabase
-from booking_data import save_booking, load_bookings
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your_secret_key_here')
@@ -17,12 +14,18 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your_secret_key_here')
 # Enable CORS
 CORS(app)
 
-# Initialize Gemini Client
-try:
-    gemini_client = genai.Client()
-except Exception as e:
-    gemini_client = None
-    print(f"Warning: Failed to initialize Gemini Client: {e}")
+# Lazy client initialization
+_gemini_client = None
+
+def get_gemini_client():
+    global _gemini_client
+    if _gemini_client is None:
+        try:
+            from google import genai
+            _gemini_client = genai.Client()
+        except Exception as e:
+            print(f"Warning: Failed to initialize Gemini Client: {e}")
+    return _gemini_client
 
 # Allowed public endpoints
 PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'contact', 'booking', 'login', 'static', 'chat']
@@ -56,6 +59,7 @@ def contact():
 @app.route('/booking', methods=['GET', 'POST'])
 def booking():
     if request.method == 'POST':
+        from booking_data import save_booking
         name = request.form.get('name')
         email = request.form.get('email')
         phone_number = request.form.get('phone_number')
@@ -69,6 +73,7 @@ def booking():
 # Admin Dashboard Routes
 @app.route('/dashboard')
 def dashboard():
+    from booking_data import load_bookings
     bookings = load_bookings()
     recent_bookings = bookings[:5] if bookings else []
     return render_template('dashboard/index.html', bookings=bookings, recent_bookings=recent_bookings)
@@ -76,6 +81,7 @@ def dashboard():
 # View All Bookings
 @app.route('/view-bookings')
 def view_bookings():
+    from booking_data import load_bookings
     bookings = load_bookings()
     return render_template('dashboard/view_bookings.html', bookings=bookings)
 
@@ -83,6 +89,7 @@ def view_bookings():
 @app.route('/dashboard/blogs')
 def blogs():
     try:
+        from supabase_client import supabase
         # Use singleton supabase client
         res = supabase.table("blogs").select("*").order("created_at", desc=True).execute()
         blog_posts = res.data if res.data else []
@@ -97,7 +104,8 @@ def new_blog():
 
 @app.route('/dashboard/blogs/generate', methods=['POST'])
 def generate_blog_content():
-    if not gemini_client:
+    client = get_gemini_client()
+    if not client:
         return jsonify({"error": "AI service is currently unavailable."}), 503
         
     data = request.get_json()
@@ -106,7 +114,7 @@ def generate_blog_content():
     prompt = f"Write a professional blog post about {topic} for Insight Collective, an advisory firm. The tone should be strategic, insightful, and authoritative. Include a catchy title and formatted content with headings. Keep it under 800 words."
     
     try:
-        response = gemini_client.models.generate_content(
+        response = client.models.generate_content(
             model='gemini-2.5-flash-lite',
             contents=prompt
         )
@@ -130,6 +138,7 @@ def upload_blog_image():
         return jsonify({"error": "File type not allowed. Use: png, jpg, jpeg, gif, webp"}), 400
     
     try:
+        from supabase_client import supabase
         # Use singleton supabase client
         # Generate a unique filename
         unique_name = f"blog-images/{uuid.uuid4().hex}.{ext}"
@@ -170,6 +179,7 @@ def save_blog():
         slug = ''.join(c for c in slug if c.isalnum() or c == '-')
     
     try:
+        from supabase_client import supabase
         # Use singleton supabase client
         blog_data = {
             "title": title,
@@ -192,6 +202,7 @@ def login():
         password = request.form.get('password')
         
         try:
+            from supabase_client import supabase
             # Use singleton supabase client
             res = supabase.auth.sign_in_with_password({"email": email, "password": password})
             if res.user:
@@ -214,7 +225,8 @@ def logout():
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    if not gemini_client:
+    client = get_gemini_client()
+    if not client:
         return jsonify({"error": "AI service is currently unavailable."}), 503
         
     data = request.get_json()
@@ -226,7 +238,7 @@ def chat():
     system_prompt = "You are Insight AI, an intelligent assistant for Insight Collective, an advisory firm serving SMEs and visionary founders facing volatile markets. They act as Operational Architects providing Research Over Reaction, Disciplined Intelligence, and Coded Execution in Service areas: Intelligence & Positioning, Risk & Opportunity Mapping, and System Architecture. Be concise, professional, direct, and persuasive. Try not to generate extremely long responses. Keep it under 3 paragraphs."
     
     try:
-        response = gemini_client.models.generate_content(
+        response = client.models.generate_content(
             model='gemini-2.5-flash-lite',
             contents=system_prompt + "\n\nUser: " + user_message
         )
@@ -237,5 +249,5 @@ def chat():
 
 if __name__ == '__main__':
     print("[READY] Fadav Elite Group Command Center Starting...")
-    port = int(os.environ.get('PORT', 8000))
+    port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port, debug=True)
