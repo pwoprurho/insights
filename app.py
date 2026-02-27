@@ -30,19 +30,22 @@ try:
     else:
         app.secret_key = raw_secret
 
+    # Initialize Gemini Client
+    log("Initializing Gemini Client...")
+    try:
+        gemini_client = genai.Client()
+        log("Gemini Client successfully initialized.")
+    except Exception as e:
+        gemini_client = None
+        log(f"Warning: Failed to initialize Gemini Client: {e}")
+
 except Exception as e:
     log(f"CRITICAL ERROR DURING INITIALIZATION: {e}")
     import traceback
     log(traceback.format_exc())
     raise
 
-# Initialize Gemini Client
-# The client automatically picks up GEMINI_API_KEY from the environment
-try:
-    gemini_client = genai.Client()
-except Exception as e:
-    gemini_client = None
-    print(f"Warning: Failed to initialize Gemini Client: {e}")
+log("Application module fully loaded and ready.")
 
 # Allowed public endpoints
 PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'contact', 'booking', 'login', 'static', 'chat']
