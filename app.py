@@ -58,7 +58,12 @@ def require_login():
 
 @app.route('/')
 def home():
+    log("Home page accessed.")
     return render_template('home.html')
+
+@app.route('/health')
+def health():
+    return jsonify({"status": "healthy"}), 200
 
 @app.route('/about')
 def about():
