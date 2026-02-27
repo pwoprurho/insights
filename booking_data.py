@@ -1,9 +1,8 @@
-from db import get_supabase
+from supabase_client import supabase
 import logging
 
 def save_booking(name, email, phone_number, service, date):
     try:
-        supabase = get_supabase()
         data = {
             "name": name,
             "email": email,
@@ -19,7 +18,6 @@ def save_booking(name, email, phone_number, service, date):
 
 def load_bookings():
     try:
-        supabase = get_supabase()
         # Fetching all bookings, ordered by creation date descending
         res = supabase.table("bookings").select("*").order("created_at", desc=True).execute()
         return res.data if res.data else []

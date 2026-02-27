@@ -1,5 +1,6 @@
-Flask
-python-dotenv
-supabase
+Flask==2.3.3
+python-dotenv==1.0.0
+supabase==2.27.3
 google-genai
 gunicorn
+Flask-Cors==4.0.0

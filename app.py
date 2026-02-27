@@ -1,15 +1,19 @@
 import os
 import uuid
-from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask_cors import CORS
+from dotenv import load_dotenv
 from google import genai
-from db import get_supabase
+from supabase_client import supabase
 from booking_data import save_booking, load_bookings
 
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+
+# Enable CORS
+CORS(app)
 
 # Initialize Gemini Client
 try:
@@ -77,7 +81,7 @@ def view_bookings():
 @app.route('/dashboard/blogs')
 def blogs():
     try:
-        supabase = get_supabase()
+        # Use singleton supabase client
         res = supabase.table("blogs").select("*").order("created_at", desc=True).execute()
         blog_posts = res.data if res.data else []
     except Exception as e:
@@ -124,7 +128,7 @@ def upload_blog_image():
         return jsonify({"error": "File type not allowed. Use: png, jpg, jpeg, gif, webp"}), 400
     
     try:
-        supabase = get_supabase()
+        # Use singleton supabase client
         # Generate a unique filename
         unique_name = f"blog-images/{uuid.uuid4().hex}.{ext}"
         file_bytes = file.read()
@@ -164,7 +168,7 @@ def save_blog():
         slug = ''.join(c for c in slug if c.isalnum() or c == '-')
     
     try:
-        supabase = get_supabase()
+        # Use singleton supabase client
         blog_data = {
             "title": title,
             "slug": slug,
@@ -186,7 +190,7 @@ def login():
         password = request.form.get('password')
         
         try:
-            supabase = get_supabase()
+            # Use singleton supabase client
             res = supabase.auth.sign_in_with_password({"email": email, "password": password})
             if res.user:
                 session['logged_in'] = True
@@ -230,5 +234,6 @@ def chat():
         return jsonify({"error": "Failed to generate AI response."}), 500
 
 if __name__ == '__main__':
+    print("[READY] Fadav Elite Group Command Center Starting...")
     port = int(os.environ.get('PORT', 8000))
     app.run(host='0.0.0.0', port=port, debug=True)
