@@ -1,51 +1,22 @@
 import os
 import uuid
-import sys
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from google import genai
+from db import get_supabase
+from booking_data import save_booking, load_bookings
 
-# Ensure logs are visible immediately
-def log(msg):
-    print(f"DEBUG: {msg}", file=sys.stderr)
-    sys.stderr.flush()
+load_dotenv()
 
+app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+
+# Initialize Gemini Client
 try:
-    log("Starting application initialization...")
-    load_dotenv()
-    log("Environment variables loaded.")
-
-    from google import genai
-    from db import get_supabase
-    from booking_data import save_booking, load_bookings
-    log("Internal modules imported.")
-
-    app = Flask(__name__)
-    log("Flask app instance created.")
-    
-    # Use a safe fallback for the secret key
-    raw_secret = os.environ.get('SECRET_KEY', 'your_secret_key_here')
-    if "os.secret_hex" in raw_secret:
-        log("Warning: SECRET_KEY in env seems to be a code snippet, using default.")
-        app.secret_key = "development_secret_key_fallback"
-    else:
-        app.secret_key = raw_secret
-
-    # Initialize Gemini Client
-    log("Initializing Gemini Client...")
-    try:
-        gemini_client = genai.Client()
-        log("Gemini Client successfully initialized.")
-    except Exception as e:
-        gemini_client = None
-        log(f"Warning: Failed to initialize Gemini Client: {e}")
-
+    gemini_client = genai.Client()
 except Exception as e:
-    log(f"CRITICAL ERROR DURING INITIALIZATION: {e}")
-    import traceback
-    log(traceback.format_exc())
-    raise
-
-log("Application module fully loaded and ready.")
+    gemini_client = None
+    print(f"Warning: Failed to initialize Gemini Client: {e}")
 
 # Allowed public endpoints
 PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'contact', 'booking', 'login', 'static', 'chat']
@@ -58,7 +29,6 @@ def require_login():
 
 @app.route('/')
 def home():
-    log("Home page accessed.")
     return render_template('home.html')
 
 @app.route('/health')
@@ -260,6 +230,5 @@ def chat():
         return jsonify({"error": "Failed to generate AI response."}), 500
 
 if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 5000
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host='0.0.0.0', port=port, debug=True)
