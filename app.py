@@ -1,13 +1,15 @@
 import os
 import uuid
+from dotenv import load_dotenv
+
+# Load environment variables early
+load_dotenv()
+
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_cors import CORS
-from dotenv import load_dotenv
 from google import genai
 from supabase_client import supabase
 from booking_data import save_booking, load_bookings
-
-load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your_secret_key_here')
