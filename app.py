@@ -6,9 +6,12 @@ from google import genai
 from db import get_supabase
 from booking_data import save_booking, load_bookings
 
+print("Starting application initialization...")
 load_dotenv()
+print("Environment variables loaded.")
 
 app = Flask(__name__)
+print("Flask app instance created.")
 app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')  # Needed for flash messages
 
 # Initialize Gemini Client
