@@ -4,13 +4,26 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_KEY")
+_supabase: Client = None
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    missing = []
-    if not SUPABASE_URL: missing.append("SUPABASE_URL")
-    if not SUPABASE_KEY: missing.append("SUPABASE_KEY")
-    raise ValueError(f"CRITICAL: Missing environment variables: {', '.join(missing)}. Please set them in your Railway dashboard.")
+def get_supabase() -> Client:
+    global _supabase
+    if _supabase is None:
+        url = os.environ.get("SUPABASE_URL")
+        key = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_KEY")
+        
+        if not url or not key:
+            missing = []
+            if not url: missing.append("SUPABASE_URL")
+            if not key: missing.append("SUPABASE_KEY")
+            raise ValueError(f"CRITICAL: Missing environment variables: {', '.join(missing)}. Please set them in your Railway dashboard.")
+            
+        _supabase = create_client(url, key)
+    return _supabase
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# Backward compatibility for direct import (might fail if accessed at top level)
+class SupabaseProxy:
+    def __getattr__(self, name):
+        return getattr(get_supabase(), name)
+
+supabase = SupabaseProxy()
