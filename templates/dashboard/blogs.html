@@ -7,47 +7,50 @@
     <div class="col-12">
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="mb-0">All Posts</h5>
+                <h5 class="mb-0">Institutional Intelligence Index</h5>
                 <a href="{{ url_for('new_blog') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-lg me-1"></i> Create New Post
+                    <i class="bi bi-pencil-square me-1"></i> New Publication
                 </a>
             </div>
 
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
+                <table class="table table-hover align-middle custom-table">
+                    <thead>
                         <tr>
-                            <th>Created At</th>
-                            <th>Title</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th class="py-3 px-4">Published Date</th>
+                            <th class="py-3 px-4">Title</th>
+                            <th class="py-3 px-4">Status</th>
+                            <th class="py-3 px-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for post in blogs %}
                         <tr>
-                            <td>{{ post.created_at[:10] }}</td>
-                            <td class="fw-bold">{{ post.title }}</td>
-                            <td>
+                            <td class="py-3 px-4">
+                                <span class="text-muted small">{{ post.created_at[:10] if post.created_at else 'N/A'
+                                    }}</span>
+                            </td>
+                            <td class="py-3 px-4 fw-bold text-dark">{{ post.title }}</td>
+                            <td class="py-3 px-4">
                                 {% if post.published %}
-                                <span class="badge bg-success rounded-pill px-3">Published</span>
+                                <span class="badge bg-muted text-primary border rounded-0 px-3">Published</span>
                                 {% else %}
-                                <span class="badge bg-secondary rounded-pill px-3">Draft</span>
+                                <span class="badge bg-light text-muted border rounded-0 px-3">Draft</span>
                                 {% endif %}
                             </td>
-                            <td>
+                            <td class="py-3 px-4">
                                 <div class="btn-group">
-                                    <a href="#" class="btn btn-sm btn-outline-secondary"><i
-                                            class="bi bi-pencil"></i></a>
-                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                    <a href="#" class="btn btn-sm btn-outline"><i class="bi bi-pencil"></i></a>
+                                    <button class="btn btn-sm btn-outline text-danger border-danger ms-2"><i
+                                            class="bi bi-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
                         {% else %}
                         <tr>
                             <td colspan="4" class="text-center py-5 text-muted">
-                                <i class="bi bi-journal-x d-block mb-3 fs-1 text-light"></i>
-                                No blog posts found. Click "Create New Post" to start.
+                                <i class="bi bi-journal-x d-block mb-3 fs-1 opacity-25"></i>
+                                No research reports found. Begin a new publication.
                             </td>
                         </tr>
                         {% endfor %}

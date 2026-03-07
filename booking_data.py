@@ -1,14 +1,19 @@
 from supabase_client import supabase
 import logging
 
-def save_booking(name, email, phone_number, service, date):
+def save_booking(name, email, phone_number, service, date=None, company=None, business_description=None, challenge=None, timeline=None, source=None):
     try:
         data = {
             "name": name,
             "email": email,
             "phone_number": phone_number,
             "service": service,
-            "date": date
+            "date": date,
+            "company": company,
+            "business_description": business_description,
+            "challenge": challenge,
+            "timeline": timeline,
+            "source": source
         }
         res = supabase.table("bookings").insert(data).execute()
         return res.data

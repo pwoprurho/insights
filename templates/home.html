@@ -1,96 +1,136 @@
 {% extends "base.html" %}
 
-{% block title %}Insight Collective - Home{% endblock %}
+{% block title %}Insight Collective | Strategic Intelligence & Systems Architecture{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Hero Vision Section -->
 <section class="hero-section">
     <div class="container">
-        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Insight Collective Logo" class="hero-logo">
-        <h1 class="hero-title">Welcome to Insight Collective</h1>
-        <div class="catchphrase">Think better, position smarter, build sustainably</div>
-        <p class="hero-desc">We work at the intersection of research, strategy, branding, and systems, helping our
-            clients move from confusion to clarity and from ideas to structured execution.</p>
-        <a href="/booking" class="btn btn-primary btn-lg mt-3">Book Now</a>
-    </div>
-</section>
-
-<!-- About Section -->
-<section class="container my-5">
-    <div class="glass-card">
-        <h2 class="section-title">Who We Are</h2>
-        <div class="about-text text-center">
-            <p>The Insight Collective is a strategy-led consulting and research outfit focused on helping individuals,
-                startups, and organizations think better, position smarter, and build sustainably. Our approach is not
-                trend-driven or surface-level. We prioritize deep thinking, evidence-based insight, and long-term value
-                creation.</p>
+        <span class="hero-sub">Institutional Intelligence</span>
+        <h1 class="hero-title">Research over Reaction.<br>Coded Execution.</h1>
+        <p class="hero-desc">Insight Collective is a systems architecture firm helping high-growth SMEs and visionaries
+            build the structural intelligence required to survive and scale in volatile markets.</p>
+        <div class="d-flex gap-3">
+            <a href="/booking" class="btn btn-primary">Strategic Engagement</a>
+            <a href="/about" class="btn btn-outline">Our Philosophy</a>
         </div>
     </div>
 </section>
 
-<!-- Services Section -->
-<section class="container my-5">
-    <h2 class="section-title">What We Offer</h2>
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Brand+Strategy" class="img-fluid rounded-4 mb-3"
-                    alt="Brand Strategy">
-                <h5 class="text-primary font-weight-bold">Brand Strategy & Positioning</h5>
-                <p>We help businesses and individuals define who they are, what they stand for, and how they should be
-                    perceived.</p>
+<!-- The Philosophy Section -->
+<section class="section-padding bg-muted">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <span class="card-tag">The Thesis</span>
+                <h2 class="mb-4">Growth is not the goal. Stability is.</h2>
+                <p class="lead text-muted mb-4">Most high-growth businesses are building on unstable ground. We call
+                    this the <strong>Infrastructure Gap</strong> — the distance between where your business is and the
+                    systems it needs to survive the next phase.</p>
+                <div class="accent-line"></div>
+                <p>We don't provide "advice." We design and implement the aligned systems your business needs: measured
+                    revenue architecture, defensible sales frameworks, and operational continuity structures.</p>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Research" class="img-fluid rounded-4 mb-3"
-                    alt="Research & Insight">
-                <h5 class="text-primary font-weight-bold">Research & Insight Analysis</h5>
-                <p>Research is the foundation of everything we do. We conduct structured research to understand market
-                    behavior and trends.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Consulting" class="img-fluid rounded-4 mb-3"
-                    alt="Strategic Consulting">
-                <h5 class="text-primary font-weight-bold">Strategic Consulting</h5>
-                <p>We provide advisory support for organizations and founders who need clarity before execution.</p>
+            <div class="col-lg-5 offset-lg-1">
+                <div class="intelligence-card">
+                    <h4 class="mb-4">Selective Engagement</h4>
+                    <p class="small text-muted mb-4">We work with a limited number of clients at any given time to
+                        ensure the depth and quality of every engagement.</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3 d-flex align-items-center"><i class="bi bi-check2-circle text-primary me-2"></i>
+                            Visionary Founders</li>
+                        <li class="mb-3 d-flex align-items-center"><i class="bi bi-check2-circle text-primary me-2"></i>
+                            High-Growth SMEs</li>
+                        <li class="mb-0 d-flex align-items-center"><i class="bi bi-check2-circle text-primary me-2"></i>
+                            Strategic Organizations</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Team Section -->
-<section class="container my-5 pb-5">
-    <h2 class="section-title">Our Team</h2>
-    <div class="row justify-content-center g-4">
-        <div class="col-md-4 text-center">
-            <img src="{{ url_for('static', filename='image/enny.png') }}" alt="Amure Eniola Christianah"
-                class="team-img">
-            <div class="mt-2">
-                <h5 class="mb-0">Amure Eniola Christianah</h5>
-                <p class="text-primary fw-bold">Team Lead/CEO</p>
-                <span class="text-muted">Insight Collective</span>
+<!-- The Structural Journey -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="card-tag">Our Framework</span>
+            <h2 class="hero-title" style="font-size: 2.5rem;">Coded Execution</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="intelligence-card p-4">
+                    <div class="h3 mb-3 text-muted">01</div>
+                    <h5>Diagnostic Audit</h5>
+                    <p class="small opacity-75">A 4-week assessment to identify structural friction points and
+                        infrastructure gaps.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="intelligence-card p-4">
+                    <div class="h3 mb-3 text-muted">02</div>
+                    <h5>Strategy Design</h5>
+                    <p class="small opacity-75">Developing the blueprint for your revenue architecture and positioning
+                        framework.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="intelligence-card p-4">
+                    <div class="h3 mb-3 text-muted">03</div>
+                    <h5>Architecture design</h5>
+                    <p class="small opacity-75">Designing aligned systems: revenue, sales, and operational continuity.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="intelligence-card p-4">
+                    <div class="h3 mb-3 text-muted">04</div>
+                    <h5>Strategic Implementation</h5>
+                    <p class="small opacity-75">Working alongside your team until the architecture functions
+                        independently.</p>
+                </div>
             </div>
         </div>
-        <div class="col-md-4 text-center">
-            <img src="{{ url_for('static', filename='image/Suliat.png') }}" alt="Raji Fadeshewa Suliat"
-                class="team-img">
-            <div class="mt-2">
-                <h5 class="mb-0">Raji Fadeshewa Suliat</h5>
-                <p class="text-primary fw-bold">Brand Strategy and Communication Lead</p>
-                <span class="text-muted">Insight Collective</span>
+    </div>
+</section>
+
+<!-- Team Section - Institutional Presentation -->
+<section class="section-padding bg-muted">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="card-tag">The Architects</span>
+            <h2>Led by Intelligence</h2>
+        </div>
+        <div class="row justify-content-center g-5">
+            <div class="col-md-4 text-center">
+                <img src="{{ url_for('static', filename='image/enny.png') }}" alt="Eniola Amure Christianah"
+                    class="rounded-0 mb-4 img-fluid" style="max-height: 250px; filter: grayscale(50%);">
+                <h5>Eniola Amure Christianah</h5>
+                <p class="card-tag">Strategic Lead</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{{ url_for('static', filename='image/Suliat.png') }}" alt="Raji Fadeshewa Suliat"
+                    class="rounded-0 mb-4 img-fluid" style="max-height: 250px; filter: grayscale(50%);">
+                <h5>Raji Fadeshewa Suliat</h5>
+                <p class="card-tag">Brand Architecture Lead</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{{ url_for('static', filename='image/rurho.png') }}" alt="Oghenerurho Akpojotor"
+                    class="rounded-0 mb-4 img-fluid" style="max-height: 250px; filter: grayscale(50%);">
+                <h5>Oghenerurho Akpojotor</h5>
+                <p class="card-tag">Strategic Execution</p>
             </div>
         </div>
-        <div class="col-md-4 text-center">
-            <img src="{{ url_for('static', filename='image/rurho.png') }}" alt="Oghenerurho Akpojotor" class="team-img">
-            <div class="mt-2">
-                <h5 class="mb-0">Oghenerurho Akpojotor</h5>
-                <p class="text-primary fw-bold">Chief Strategic Executioner</p>
-                <span class="text-muted">Insight Collective</span>
-            </div>
-        </div>
+    </div>
+</section>
+
+<!-- Call to Inquiry -->
+<section class="section-padding text-center">
+    <div class="container">
+        <h2 class="mb-4">Ready to architect your next phase?</h2>
+        <p class="text-muted mb-5 max-width-600 mx-auto">We review all inquiries for alignment with our current
+            engagement windows.</p>
+        <a href="/booking" class="btn btn-primary">Start the Diagnostic Process</a>
     </div>
 </section>
 {% endblock %}

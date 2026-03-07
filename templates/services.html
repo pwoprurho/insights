@@ -1,71 +1,104 @@
 {% extends "base.html" %}
 
-{% block title %}Our Services - Insight Collective{% endblock %}
+{% block title %}Strategic Services | Insight Collective{% endblock %}
 
 {% block content %}
+<!-- Services Hero -->
 <section class="hero-section">
     <div class="container">
-        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Insight Collective Logo" class="hero-logo">
-        <h1 class="hero-title">Our Core Services</h1>
-        <div class="catchphrase">Think better, position smarter, build sustainably</div>
-        <p class="hero-desc">We help organisations translate ambition into Structured, Scalable Execution.
-        </p>
+        <span class="hero-sub">Our Service Model</span>
+        <h1 class="hero-title">Structural Intelligence<br>as a Service.</h1>
+        <p class="hero-desc">Insight Collective operates a two-layer model designed for depth and accessibility. Layer 1
+            provides high-touch strategic engagement, while Layer 2 offers self-service intelligence products.</p>
     </div>
 </section>
 
-<section class="container my-5">
-    <h2 class="section-title">What We Offer</h2>
-    <div class="row g-4">
-        <!-- Brand Strategy -->
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Brand+Strategy" class="img-fluid rounded-4 mb-3"
-                    alt="Brand Strategy">
-                <h5 class="text-primary fw-bold">Brand Strategy & Positioning</h5>
-                <p>We help businesses define their strategic identity, aligning vision, values, and voice so that they
-                    can execute with clarity and confidence.</p>
+<!-- Layer 1: Strategic Engagements -->
+<section class="section-padding bg-muted">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <span class="card-tag">Layer 01</span>
+                <h2>Strategic Engagements</h2>
+                <p class="text-muted">High-touch, direct client relationships designed for businesses ready to architect
+                    their next phase of growth. Each engagement begins with a structured intake and diagnostic process.
+                </p>
             </div>
         </div>
-        <!-- Research -->
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Research" class="img-fluid rounded-4 mb-3" alt="Research">
-                <h5 class="text-primary fw-bold">Research & Insight Analysis</h5>
-                <p>Most Organisations make decisions based on activity and trends. We help you make data-driven
-                    decisions that makes
-                    you the trendsetter.</p>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="intelligence-card">
+                    <h5 class="mb-3">Diagnostic & Structural Audit</h5>
+                    <p class="small text-muted mb-4">A comprehensive assessment of your business's operational
+                        architecture. We identify your Infrastructure Gap and map structural friction points.</p>
+                    <p class="small"><strong>Duration:</strong> 2 to 4 weeks</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="intelligence-card">
+                    <h5 class="mb-3">Systems Architecture & Implementation</h5>
+                    <p class="small text-muted mb-4">Full design and implementation of aligned business systems across
+                        revenue architecture, sales framework, and operational continuity.</p>
+                    <p class="small"><strong>Duration:</strong> 8 to 16 weeks</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="intelligence-card">
+                    <h5 class="mb-3">Strategic Advisory Retainer</h5>
+                    <p class="small text-muted mb-4">Ongoing strategic partnership for businesses that want Insight
+                        Collective thinking embedded in their decision-making on a continuous basis.</p>
+                    <p class="small"><strong>Structured as a monthly engagement.</strong></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="intelligence-card">
+                    <h5 class="mb-3">Brand & Positioning Architecture</h5>
+                    <p class="small text-muted mb-4">For businesses that need their market positioning rebuilt. We
+                        research your competitive environment and define your structural identity.</p>
+                    <p class="small"><strong>Defensible and non-negotiable value.</strong></p>
+                </div>
             </div>
         </div>
-        <!-- Consulting -->
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Consulting" class="img-fluid rounded-4 mb-3"
-                    alt="Strategic Consulting">
-                <h5 class="text-primary fw-bold">Strategic Advisory</h5>
-                <p>The chasm between conceptual vision and operational reality is where most organisational momentum is
-                    lost. We provide the bridge to ensure your next era of growth is structured and sustainable.</p>
+    </div>
+</section>
+
+<!-- Layer 2: Insight Store -->
+<section class="section-padding">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5">
+                <span class="card-tag">Layer 02</span>
+                <h2>The Insight Store</h2>
+                <p class="text-muted mb-4">Self-service intelligence products for founders and teams seeking immediate
+                    structural clarity without a full strategic engagement.</p>
+                <div class="accent-line"></div>
+                <ul class="list-unstyled mb-5">
+                    <li class="mb-2"><i class="bi bi-arrow-right text-primary me-2"></i> Research briefs and sector
+                        intelligence</li>
+                    <li class="mb-2"><i class="bi bi-arrow-right text-primary me-2"></i> Operational framework templates
+                    </li>
+                    <li class="mb-2"><i class="bi bi-arrow-right text-primary me-2"></i> Strategic playbooks and
+                        implementation guides</li>
+                </ul>
+                <a href="#" class="btn btn-primary opacity-50 disabled">Store Launching Soon</a>
+            </div>
+            <div class="col-lg-6 offset-lg-1">
+                <div class="intelligence-card bg-light border-dashed">
+                    <div class="text-center py-5">
+                        <i class="bi bi-archive h1 text-muted opacity-25"></i>
+                        <p class="mt-3 text-muted">Direct access to institutional intelligence.</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Systems Design -->
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Systems" class="img-fluid rounded-4 mb-3"
-                    alt="Systems Design">
-                <h5 class="text-primary fw-bold">Systems & Solution Design</h5>
-                <p>Based on research findings, we help design practical systems that solve real problems. Includes
-                    operational frameworks and strategy-to-execution structures.</p>
-            </div>
-        </div>
-        <!-- Digital Strategy -->
-        <div class="col-md-4">
-            <div class="glass-card h-100">
-                <img src="https://placehold.co/600x400?text=Digital+Strategy" class="img-fluid rounded-4 mb-3"
-                    alt="Digital Strategy">
-                <h5 class="text-primary fw-bold">Digital & Media Strategy</h5>
-                <p>We approach digital presence strategically. Includes digital positioning strategy, content direction,
-                    and platform-specific advisory.</p>
-            </div>
-        </div>
+    </div>
+</section>
+
+<!-- Inquiry Section -->
+<section class="section-padding bg-muted text-center">
+    <div class="container">
+        <h2 class="mb-4">Ready for a Structural Audit?</h2>
+        <a href="/booking" class="btn btn-primary">Start the Intake Process</a>
     </div>
 </section>
 {% endblock %}

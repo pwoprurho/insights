@@ -6,52 +6,55 @@
 <div class="row g-4 mb-4">
     <!-- Stat Cards -->
     <div class="col-md-4">
-        <div class="dashboard-card border-left-primary">
-            <h6 class="text-muted text-uppercase mb-2">Total Bookings</h6>
-            <h2 class="mb-0">{{ bookings|length }}</h2>
+        <div class="dashboard-card border-top border-primary">
+            <h6 class="text-muted small text-uppercase mb-2 font-monospace">Structural Inquiries</h6>
+            <h2 class="mb-0 fw-bold">{{ bookings|length }}</h2>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="dashboard-card border-left-success">
-            <h6 class="text-muted text-uppercase mb-2">Total Blogs</h6>
-            <h2 class="mb-0 text-success">0</h2>
-            <small class="text-muted">Will implement later</small>
+        <div class="dashboard-card border-top border-accent">
+            <h6 class="text-muted small text-uppercase mb-2 font-monospace">Intelligence Publications</h6>
+            <h2 class="mb-0 fw-bold">{{ blog_count }}</h2>
         </div>
     </div>
 </div>
 
 <div class="row">
-    <!-- Recent Bookings Table -->
+    <!-- Recent Inquiries Table -->
     <div class="col-12">
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="mb-0">Recent Consultation Requests</h5>
-                <a href="{{ url_for('view_bookings') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                <h5 class="mb-0">Recent Structural Inquiries</h5>
+                <a href="{{ url_for('view_bookings') }}" class="btn btn-sm btn-outline">View Master List</a>
             </div>
 
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
+                <table class="table table-hover align-middle custom-table">
+                    <thead>
                         <tr>
-                            <th>Date Request</th>
-                            <th>Name</th>
-                            <th>Service</th>
-                            <th>Status</th>
+                            <th class="py-3 px-4">Inquirer</th>
+                            <th class="py-3 px-4">Service Required</th>
+                            <th class="py-3 px-4">Contact</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for booking in recent_bookings %}
                         <tr>
-                            <td>{{ booking.date }}</td>
-                            <td class="fw-bold">{{ booking.name }}</td>
-                            <td><span class="badge bg-light text-dark border">{{ booking.service }}</span></td>
-                            <td>
-                                <span class="badge bg-warning rounded-pill px-3">{{ booking.status }}</span>
+                            <td class="py-3 px-4">
+                                <div class="fw-bold text-dark">{{ booking.name }}</div>
+                                <div class="text-muted small">{{ booking.company or 'Personal' }}</div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="badge bg-muted text-primary border">{{ booking.service }}</span>
+                            </td>
+                            <td class="py-3 px-4 text-muted small">
+                                {{ booking.email }}
                             </td>
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">No recent bookings found.</td>
+                            <td colspan="3" class="text-center py-4 text-muted">No recent inquiries found in the secure
+                                records.</td>
                         </tr>
                         {% endfor %}
                     </tbody>

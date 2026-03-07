@@ -1,61 +1,77 @@
 {% extends "base.html" %}
 
-{% block title %}Book a Consultation - Insight Collective{% endblock %}
+{% block title %}Strategic Engagement Inquiry | Insight Collective{% endblock %}
 
 {% block content %}
 <section class="hero-section">
     <div class="container">
-        <h1 class="hero-title">Start A Strategic Engagement</h1>
-        <div class="catchphrase">Move from Vision to Structure</div>
-        <p class="hero-desc">Begin a structured engagement with Insight Collective.</p>
+        <span class="hero-sub">Inquiry Process</span>
+        <h1 class="hero-title">Strategic Engagements<br>Are Selective.</h1>
+        <p class="hero-desc">Insight Collective works with a limited number of clients at any given time to ensure the
+            depth and quality of every engagement. If you are building something serious and ready to architect your
+            next phase, we would like to hear from you.</p>
     </div>
 </section>
 
-<section class="container my-5 pb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="glass-card">
-                <h2 class="section-title">Booking Form</h2>
-                <form method="post" class="needs-validation" novalidate>
-                    <div class="mb-4">
-                        <label for="name" class="form-label fw-bold">Full Name</label>
-                        <input type="text" class="form-control form-control-lg" id="name" name="name"
-                            placeholder="John Doe" required>
-                        <div class="invalid-feedback">Please enter your name.</div>
+<section class="section-padding bg-muted">
+    <div class="container">
+        <div class="intake-form-container">
+            <h4 class="mb-5 text-center">Structural Intake Form</h4>
+            <form method="post" class="needs-validation" novalidate>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Full Name & Title</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                            placeholder="Amure Christianah, CEO" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="email" class="form-label fw-bold">Email Address</label>
-                        <input type="email" class="form-control form-control-lg" id="email" name="email"
-                            placeholder="john@example.com" required>
-                        <div class="invalid-feedback">Please enter a valid email.</div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="email@company.com"
+                            required>
                     </div>
-                    <div class="mb-4">
-                        <label for="phone_number" class="form-label fw-bold">Phone Number</label>
-                        <input type="tel" class="form-control form-control-lg" id="phone_number" name="phone_number"
-                            placeholder="Optional: +1 234 567 890">
+                    <div class="col-md-6">
+                        <label for="company" class="form-label">Company Name & Sector</label>
+                        <input type="text" class="form-control" id="company" name="company"
+                            placeholder="e.g., Tech Solutions, Fintech" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="service" class="form-label fw-bold">Service Type</label>
-                        <select class="form-select form-select-lg" id="service" name="service" required>
-                            <option value="" selected disabled>Choose a service...</option>
-                            <option>Brand Strategy & Positioning</option>
-                            <option>Research & Insight Analysis</option>
-                            <option>Strategic Consulting</option>
-                            <option>Systems & Solution Design</option>
-                            <option>Digital & Media Strategy</option>
+                    <div class="col-md-6">
+                        <label for="engagement_type" class="form-label">Preferred Engagement</label>
+                        <select class="form-select" id="engagement_type" name="service" required>
+                            <option value="" selected disabled>Choose engagement type...</option>
+                            <option>Diagnostic Audit</option>
+                            <option>Systems Architecture</option>
+                            <option>Advisory Retainer</option>
+                            <option>Brand Architecture</option>
+                            <option>Not Sure Yet</option>
                         </select>
-                        <div class="invalid-feedback">Please select a service.</div>
                     </div>
-                    <div class="mb-4">
-                        <label for="date" class="form-label fw-bold">Preferred Date</label>
-                        <input type="date" class="form-control form-control-lg" id="date" name="date" required>
-                        <div class="invalid-feedback">Please select a date.</div>
+                    <div class="col-12">
+                        <label for="business_description" class="form-label">Business Description & Stage</label>
+                        <textarea class="form-control" id="business_description" name="business_description" rows="3"
+                            placeholder="Briefly describe your business and current stage of growth."
+                            required></textarea>
                     </div>
-                    <div class="text-center mt-5">
-                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3">Register Booking</button>
+                    <div class="col-12">
+                        <label for="challenge" class="form-label">What specific challenge or goal prompted you to reach
+                            out?</label>
+                        <textarea class="form-control" id="challenge" name="challenge" rows="3" required></textarea>
                     </div>
-                </form>
-            </div>
+                    <div class="col-md-6">
+                        <label for="timeline" class="form-label">Timeline & Urgency</label>
+                        <input type="text" class="form-control" id="timeline" name="timeline"
+                            placeholder="e.g., Immediate, Next Quarter" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="source" class="form-label">How did you find Insight Collective?</label>
+                        <input type="text" class="form-control" id="source" name="source" required>
+                    </div>
+                    <div class="col-12 mt-5">
+                        <button type="submit" class="btn btn-primary w-100 py-3">Submit Inquiry</button>
+                        <p class="small text-muted text-center mt-3">We review all submissions carefully and will
+                            respond within 3 to 5 business days if your inquiry is a strong fit.</p>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </section>
@@ -63,19 +79,8 @@
 
 {% block extra_styles %}
 <style>
-    .form-control,
-    .form-select {
-        background: rgba(255, 255, 255, 0.5);
-        border: 1px solid var(--glass-border);
-        border-radius: 12px;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        background: rgba(255, 255, 255, 0.8);
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.25rem rgba(2, 175, 241, 0.15);
+    .border-dashed {
+        border-style: dashed !important;
     }
 </style>
 {% endblock %}

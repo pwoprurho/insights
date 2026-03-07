@@ -24,7 +24,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="input-group">
+                            <input type="password" class="form-control border-end-0" id="password" name="password"
+                                required>
+                            <button class="btn btn-outline-secondary border-start-0 bg-white" type="button"
+                                id="togglePassword" style="border-color: #dee2e6;">
+                                <i class="bi bi-eye text-muted"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="d-grid mt-4">
                         <button type="submit" class="btn btn-primary btn-lg">Login</button>
@@ -34,4 +41,22 @@
         </div>
     </div>
 </section>
+
+{% block extra_scripts %}
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        // toggle the eye slash icon
+        const icon = this.querySelector('i');
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+    });
+</script>
+{% endblock %}
 {% endblock %}

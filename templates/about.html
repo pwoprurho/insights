@@ -1,56 +1,87 @@
 {% extends "base.html" %}
 
-{% block title %}About Us - Insight Collective{% endblock %}
+{% block title %}About the Firm | Insight Collective{% endblock %}
 
 {% block content %}
 <section class="hero-section">
     <div class="container">
-        <h1 class="hero-title">About Insight Collective</h1>
-        <div class="catchphrase">Deep thinking, evidence-based insight</div>
-        <p class="hero-desc">We work at the intersection of research, strategy, branding, and systems, helping our
-            clients move from confusion to clarity and from ideas to structured execution.</p>
+        <span class="hero-sub">The Thesis</span>
+        <h1 class="hero-title">Building Institutions,<br>Not Just Businesses.</h1>
+        <p class="hero-desc">Insight Collective is a systems architecture firm helping high-growth SMEs and visionaries
+            build the structural intelligence required to scale with stability.</p>
     </div>
 </section>
 
-<section class="container my-5">
-    <div class="glass-card">
-        <h2 class="section-title">Who We Are</h2>
-        <div class="about-text text-center">
-            <p>The Insight Collective is a strategy-led consulting and research outfit focused on helping individuals,
-                startups, and organizations think better, position smarter, and build sustainably. Our approach is not
-                trend-driven or surface-level. We prioritize deep thinking, evidence-based insight, and long-term value
-                creation.</p>
+<section class="section-padding bg-muted">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6">
+                <span class="card-tag">Our Vision</span>
+                <h2 class="mb-4">Intelligence for the African Growth-Stage.</h2>
+                <p class="text-muted">We are building toward becoming a leading institutional intelligence and systems
+                    architecture firm serving high-growth businesses across Africa. We operate at the intersection of
+                    business, policy, and institutional design.</p>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <div class="intelligence-card">
+                    <h5>Our Mandate</h5>
+                    <p class="small text-muted mt-3">To provide the structural intelligence required for businesses to
+                        move from confusion to clarity and from ideas to structured execution.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="container my-5 pb-5">
-    <h2 class="section-title">Our Team</h2>
-    <div class="row justify-content-center g-4">
-        <div class="col-md-4 text-center">
-            <img src="{{ url_for('static', filename='image/enny.png') }}" alt="Amure Eniola Christianah"
-                class="team-img">
-            <div class="mt-2">
-                <h5 class="mb-0">Amure Eniola Christianah</h5>
-                <p class="text-primary fw-bold">Team Lead/CEO</p>
-                <span class="text-muted">Insight Collective</span>
+<section class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h4 class="mb-3">Research-Led</h4>
+                <p class="small text-muted">We prioritize evidence-based insight over market noise. Every strategy
+                    design begins with deep, structured research into the competitive environment.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h4 class="mb-3">Architecturally Sound</h4>
+                <p class="small text-muted">We don't provide surface-level advice. We design revenue architecture, sales
+                    frameworks, and operational structures that are defensible and scalable.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h4 class="mb-3">Selectively Engaged</h4>
+                <p class="small text-muted">We work with a limited number of clients to ensure depth and quality. We
+                    only partner where we can see the potential for institutional-grade growth.</p>
             </div>
         </div>
-        <div class="col-md-4 text-center">
-            <img src="{{ url_for('static', filename='image/Suliat.png') }}" alt="Raji Fadeshewa Suliat"
-                class="team-img">
-            <div class="mt-2">
-                <h5 class="mb-0">Raji Fadeshewa Suliat</h5>
-                <p class="text-primary fw-bold">Brand Strategy and Communication Lead</p>
-                <span class="text-muted">Insight Collective</span>
-            </div>
+    </div>
+</section>
+
+<section class="section-padding bg-muted">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="card-tag">The Architects</span>
+            <h2>Led by Intelligence</h2>
         </div>
-        <div class="col-md-4 text-center">
-            <img src="{{ url_for('static', filename='image/rurho.png') }}" alt="Oghenerurho Akpojotor" class="team-img">
-            <div class="mt-2">
-                <h5 class="mb-0">Oghenerurho Akpojotor</h5>
-                <p class="text-primary fw-bold">Chief Strategic Executioner</p>
-                <span class="text-muted">Insight Collective</span>
+        <div class="row justify-content-center g-5">
+            <div class="col-md-4 text-center">
+                <img src="{{ url_for('static', filename='image/enny.png') }}" alt="Eniola Amure Christianah"
+                    class="rounded-0 mb-4 img-fluid" style="max-height: 250px; filter: grayscale(50%);">
+                <h5>Eniola Amure Christianah</h5>
+                <p class="card-tag">Strategic Lead</p>
+                <p class="small text-muted px-3">Expert in revenue architecture and institutional design.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{{ url_for('static', filename='image/Suliat.png') }}" alt="Raji Fadeshewa Suliat"
+                    class="rounded-0 mb-4 img-fluid" style="max-height: 250px; filter: grayscale(50%);">
+                <h5>Raji Fadeshewa Suliat</h5>
+                <p class="card-tag">Brand Architecture Lead</p>
+                <p class="small text-muted px-3">Specialist in definitive market positioning and brand systems.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{{ url_for('static', filename='image/rurho.png') }}" alt="Oghenerurho Akpojotor"
+                    class="rounded-0 mb-4 img-fluid" style="max-height: 250px; filter: grayscale(50%);">
+                <h5>Oghenerurho Akpojotor</h5>
+                <p class="card-tag">Strategic Execution</p>
+                <p class="small text-muted px-3">Focused on operational continuity and systems implementation.</p>
             </div>
         </div>
     </div>
