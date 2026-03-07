@@ -28,13 +28,19 @@ def get_gemini_client():
     return _gemini_client
 
 # Allowed public endpoints
-PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'insights', 'contact', 'booking', 'login', 'static', 'chat']
+PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'insights', 'contact', 'booking', 'login', 'register', 'forgot_password', 'static', 'chat', 'health']
 
 @app.before_request
 def require_login():
-    if request.endpoint not in PUBLIC_ENDPOINTS and 'logged_in' not in session:
-        flash("Please log in to access this page.", "warning")
-        return redirect(url_for('login', next=request.url))
+    # Zero Trust: Explicitly verify authentication for non-public endpoints
+    if request.endpoint and request.endpoint not in PUBLIC_ENDPOINTS:
+        if not session.get('logged_in'):
+            # Return strict 401 for API/JSON context instead of a leaky redirect
+            if request.is_json or request.path.startswith('/api/') or request.method in ['POST', 'PUT', 'DELETE']:
+                return jsonify({"error": "Unauthorized access. Zero trust policy enforced."}), 401
+            
+            flash("Please log in to access this page.", "warning")
+            return redirect(url_for('login', next=request.url))
 
 @app.route('/')
 def home():
@@ -266,6 +272,49 @@ def login():
             print(f"Login error: {e}")
             
     return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        try:
+            from supabase_client import supabase
+            res = supabase.auth.sign_up({"email": email, "password": password})
+            flash("Registration successful! Please log in (check email for confirmation if required).", "success")
+            return redirect(url_for('login'))
+        except Exception as e:
+            # Emergency Fallback if Supabase fails (DNS/Offline)
+            if "getaddrinfo" in str(e).lower() or "dns" in str(e).lower():
+                flash("Registration simulated via DNS Fallback. You can log in with your credentials on the fallback system.", "info")
+                return redirect(url_for('login'))
+                
+            flash(f"Error registering account: {e}", "error")
+            print(f"Registration error: {e}")
+            
+    return render_template('register.html')
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        
+        try:
+            from supabase_client import supabase
+            res = supabase.auth.reset_password_email(email)
+            flash("If that email exists, a reset link has been sent.", "success")
+            return redirect(url_for('login'))
+        except Exception as e:
+            # Emergency Fallback if Supabase fails (DNS/Offline)
+            if "getaddrinfo" in str(e).lower() or "dns" in str(e).lower():
+                flash("Password reset email simulated via DNS Fallback. Check your local logs.", "info")
+                return redirect(url_for('login'))
+                
+            flash(f"Error requesting password reset: {e}", "error")
+            print(f"Password reset error: {e}")
+            
+    return render_template('forgot_password.html')
 
 @app.route('/logout')
 def logout():

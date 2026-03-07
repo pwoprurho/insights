@@ -14,54 +14,55 @@
 <section class="section-padding">
     <div class="container">
         <!-- Featured Article -->
+        {% if blogs %}
         <div class="row mb-5 pb-5 border-bottom border-light">
             <div class="col-lg-6 mb-4 mb-lg-0">
+                {% if blogs[0].image_url %}
                 <div class="img-placeholder bg-light mb-4"
-                    style="height: 400px; display: flex; align-items: center; justify-content: center;">
+                    style="height: 400px; background-image: url('{{ blogs[0].image_url }}'); background-size: cover; background-position: center; border-radius: 8px;">
+                </div>
+                {% else %}
+                <div class="img-placeholder bg-light mb-4"
+                    style="height: 400px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
                     <i class="bi bi-file-text h1 text-muted opacity-25"></i>
                 </div>
+                {% endif %}
             </div>
             <div class="col-lg-5 offset-lg-1 d-flex flex-column justify-content-center">
                 <span class="card-tag">Featured Article</span>
-                <h2 class="mb-3">The Infrastructure Gap: Why Growth-Stage SMEs Are Building on Unstable Ground.</h2>
-                <p class="text-muted mb-4">An exploration of the distance between current operational capacity and the
-                    systems required for institutional-grade growth.</p>
-                <div class="article-meta">Published: March 2026 • 8 min read</div>
+                <h2 class="mb-3">{{ blogs[0].title }}</h2>
+                <p class="text-muted mb-4">{{ blogs[0].content | striptags | truncate(200) }}</p>
+                <div class="article-meta">Published: {{ blogs[0].created_at[:10] if blogs[0].created_at else 'Recent' }}
+                </div>
                 <a href="#" class="btn btn-outline mt-4 align-self-start">Read Full Article</a>
             </div>
         </div>
+        {% endif %}
 
         <!-- Blog Feed -->
         <div class="row">
             <div class="col-lg-8">
                 <h4 class="mb-5">Latest Intelligence</h4>
 
-                {% for post in blogs %}
+                {% if blogs and blogs|length > 1 %}
+                {% for post in blogs[1:] %}
                 <a href="#" class="article-card">
-                    <span class="card-tag">{% if post.category %}{{ post.category }}{% else %}Structural Frameworks{%
-                        endif %}</span>
+                    <span class="card-tag">Structural Frameworks</span>
                     <h3 class="article-title">{{ post.title }}</h3>
                     <p class="text-muted small mb-3">{{ post.content | striptags | truncate(160) }}</p>
-                    <div class="article-meta">{{ post.created_at[:10] if post.created_at else 'March 2026' }}</div>
+                    <div class="article-meta">{{ post.created_at[:10] if post.created_at else 'Recent' }}</div>
                 </a>
                 {% endfor %}
-
-                <!-- Fallback if no blogs yet -->
-                {% if not blogs %}
-                <div class="article-card">
-                    <span class="card-tag">Research Brief</span>
-                    <h3 class="article-title">Market Intelligence: Navigating Volatility in SME Sectors</h3>
-                    <p class="text-muted small mb-3">A structural approach to risk management and opportunity mapping in
-                        high-friction markets.</p>
-                    <div class="article-meta">Coming Soon</div>
+                {% elif not blogs %}
+                <!-- No blogs yet -->
+                <div class="article-card text-center py-5">
+                    <i class="bi bi-journal-x display-4 text-muted mb-3 opacity-50"></i>
+                    <h3 class="article-title">No Intelligence Publications Yet</h3>
+                    <p class="text-muted">Our analysts are currently preparing the next series of structural frameworks
+                        and research briefs.</p>
                 </div>
-                <div class="article-card">
-                    <span class="card-tag">Founder Insights</span>
-                    <h3 class="article-title">The Discipline of Systems: A CEO's Guide to Delegation</h3>
-                    <p class="text-muted small mb-3">Building the architecture that allows you to step away from the
-                        daily operations without losing control.</p>
-                    <div class="article-meta">Coming Soon</div>
-                </div>
+                {% else %}
+                <p class="text-muted">No additional publications at this time.</p>
                 {% endif %}
             </div>
 

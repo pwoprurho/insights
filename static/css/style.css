@@ -28,8 +28,16 @@ body {
 }
 
 #bg-canvas {
-    display: none;
-    /* Removing heavy 3D background for cleaner look */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: auto;
+    /* Allow mouse interaction for 3D effect */
+    background-color: var(--bg-white);
+    /* Fallback background */
 }
 
 h1,
@@ -45,8 +53,8 @@ h6 {
 
 /* Navbar - Institutional & Clean */
 .navbar {
-    background: var(--bg-white);
-    border-bottom: 1px solid var(--border-light);
+    background: var(--primary-navy);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1.25rem 0;
     transition: all 0.3s ease;
 }
@@ -54,29 +62,28 @@ h6 {
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--primary-navy) !important;
+    color: var(--bg-white) !important;
     letter-spacing: -0.01em;
 }
 
 .navbar-brand img {
     height: 32px;
     margin-right: 12px;
-    filter: brightness(0.8);
-    /* Subtler logo integration */
+    filter: brightness(0) invert(1);
+    /* White logo for dark navbar */
 }
 
 .nav-link {
-    color: var(--text-charcoal) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
     font-weight: 500;
     font-size: 0.95rem;
     margin-left: 1.5rem;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
+    transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 .nav-link:hover {
+    color: var(--bg-white) !important;
     opacity: 1;
-    color: var(--accent-blue) !important;
 }
 
 /* Buttons - Deliberate & Premium */
@@ -94,7 +101,8 @@ h6 {
 }
 
 .btn-primary:hover {
-    background-color: var(--accent-blue);
+    background-color: #124060;
+    /* Darker accent blue */
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

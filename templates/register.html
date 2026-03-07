@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Insight Collective - Login{% endblock %}
+{% block title %}Insight Collective - Register Admin{% endblock %}
 
 {% block content %}
 <section class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="glass-card">
-                <h2 class="section-title text-center mb-4">Login</h2>
+                <h2 class="section-title text-center mb-4">Register Admin</h2>
 
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -19,7 +19,7 @@
                 {% endif %}
                 {% endwith %}
 
-                <form action="{{ url_for('login') }}" method="POST">
+                <form action="{{ url_for('register') }}" method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" required>
@@ -36,13 +36,11 @@
                         </div>
                     </div>
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Register Account</button>
                     </div>
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ url_for('forgot_password') }}" class="text-muted text-decoration-none small">Forgot
-                            Password?</a>
-                        <a href="{{ url_for('register') }}" class="text-muted text-decoration-none small">Register
-                            Account</a>
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('login') }}" class="text-muted text-decoration-none small">Already have an
+                            account? Log in</a>
                     </div>
                 </form>
             </div>
@@ -56,11 +54,8 @@
     const password = document.querySelector('#password');
 
     togglePassword.addEventListener('click', function (e) {
-        // toggle the type attribute
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         password.setAttribute('type', type);
-
-        // toggle the eye slash icon
         const icon = this.querySelector('i');
         icon.classList.toggle('bi-eye');
         icon.classList.toggle('bi-eye-slash');
