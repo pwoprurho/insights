@@ -7,13 +7,14 @@
     --bg-white: #FFFFFF;
     --bg-off-white: #F9FAFB;
     --border-light: #E5E7EB;
+    --logo-blue: #1699e7;
+    /* Blue from the insight collective logo */
 
     --shadow-premium: 0 4px 20px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.05);
     --shadow-intense: 0 20px 40px rgba(0, 0, 0, 0.05);
 
     --primary-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --serif-font: 'Playfair Display', serif;
-    /* Kept for very specific accents if needed, but primary is Inter */
 }
 
 /* Base Styles */
@@ -69,8 +70,7 @@ h6 {
 .navbar-brand img {
     height: 32px;
     margin-right: 12px;
-    filter: brightness(0) invert(1);
-    /* White logo for dark navbar */
+    /* Removed filter to display the actual logo image */
 }
 
 .nav-link {
@@ -250,7 +250,7 @@ h6 {
 
 .footer-logo-container img {
     height: 40px;
-    filter: brightness(0) invert(1);
+    /* Removed filter to display original logo */
     margin-bottom: 2rem;
 }
 
