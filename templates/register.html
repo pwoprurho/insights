@@ -1,52 +1,44 @@
-{% extends "base.html" %}
+{% extends "dashboard/dashboard_base.html" %}
 
-{% block title %}Insight Collective - Register Admin{% endblock %}
+{% block page_title %}Create Admin Account{% endblock %}
 
 {% block content %}
-<section class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="glass-card">
-                <h2 class="section-title text-center mb-4">Register Admin</h2>
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <div class="dashboard-card shadow-sm">
 
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                {% for category, message in messages %}
-                <div
-                    class="alert alert-{{ 'danger' if category == 'error' else (category if category != 'message' else 'info') }} text-center">
-                    {{ message }}</div>
-                {% endfor %}
-                {% endif %}
-                {% endwith %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div
+                class="alert alert-{{ 'danger' if category == 'error' else (category if category != 'message' else 'info') }} text-center">
+                {{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
 
-                <form action="{{ url_for('register') }}" method="POST">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+            <form action="{{ url_for('register') }}" method="POST">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control border-end-0" id="password" name="password" required>
+                        <button class="btn btn-outline-secondary border-start-0 bg-white" type="button"
+                            id="togglePassword" style="border-color: #dee2e6;">
+                            <i class="bi bi-eye text-muted"></i>
+                        </button>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control border-end-0" id="password" name="password"
-                                required>
-                            <button class="btn btn-outline-secondary border-start-0 bg-white" type="button"
-                                id="togglePassword" style="border-color: #dee2e6;">
-                                <i class="bi bi-eye text-muted"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Register Account</button>
-                    </div>
-                    <div class="text-center mt-4">
-                        <a href="{{ url_for('login') }}" class="text-muted text-decoration-none small">Already have an
-                            account? Log in</a>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                </div>
+            </form>
         </div>
     </div>
-</section>
+</div>
 
 {% block extra_scripts %}
 <script>

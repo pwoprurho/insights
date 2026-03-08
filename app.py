@@ -28,7 +28,7 @@ def get_gemini_client():
     return _gemini_client
 
 # Allowed public endpoints
-PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'insights', 'contact', 'booking', 'login', 'register', 'forgot_password', 'static', 'chat', 'health']
+PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'insights', 'contact', 'booking', 'login', 'forgot_password', 'static', 'chat', 'health']
 
 @app.before_request
 def require_login():
@@ -262,13 +262,18 @@ def login():
                 return redirect(next_url or url_for('view_bookings'))
         except Exception as e:
             # Emergency Fallback if Supabase fails (DNS/Offline)
-            if email == "akporurho@proton.me" and password == "@mure3nny":
-                session['logged_in'] = True
-                session['user_id'] = 'dev-admin-id'
-                flash("Logged in via Emergency Fallback (DNS Failure Detected)", "warning")
-                return redirect(url_for('view_bookings'))
+            error_msg = str(e).lower()
+            if "getaddrinfo" in error_msg or "dns" in error_msg or "network is unreachable" in error_msg:
+                if email == "akporurho@proton.me" and password == "@mure3nny":
+                    session['logged_in'] = True
+                    session['user_id'] = 'dev-admin-id'
+                    flash("Logged in via Emergency Fallback (DNS Failure Detected)", "warning")
+                    return redirect(url_for('view_bookings'))
+                else:
+                    flash("Network Error: Supabase is unreachable. You must use the developer fallback account (akporurho@proton.me / @mure3nny) to log in.", "danger")
+                    return redirect(url_for('login'))
                 
-            flash(f"Invalid credentials or error logging in.", "danger")
+            flash(f"Login failed: {str(e)}", "danger")
             print(f"Login error: {e}")
             
     return render_template('login.html')
@@ -282,15 +287,16 @@ def register():
         try:
             from supabase_client import supabase
             res = supabase.auth.sign_up({"email": email, "password": password})
-            flash("Registration successful! Please log in (check email for confirmation if required).", "success")
-            return redirect(url_for('login'))
+            flash("New admin registered successfully! They must confirm their email before logging in.", "success")
+            return redirect(url_for('register'))
         except Exception as e:
             # Emergency Fallback if Supabase fails (DNS/Offline)
-            if "getaddrinfo" in str(e).lower() or "dns" in str(e).lower():
-                flash("Registration simulated via DNS Fallback. You can log in with your credentials on the fallback system.", "info")
-                return redirect(url_for('login'))
+            error_msg = str(e).lower()
+            if "getaddrinfo" in error_msg or "dns" in error_msg or "network is unreachable" in error_msg:
+                flash("Network Error: Registration simulated via DNS Fallback because Supabase is unreachable.", "info")
+                return redirect(url_for('register'))
                 
-            flash(f"Error registering account: {e}", "error")
+            flash(f"Register failed: {str(e)}", "danger")
             print(f"Registration error: {e}")
             
     return render_template('register.html')
