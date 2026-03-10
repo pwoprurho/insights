@@ -25,24 +25,30 @@
                     </thead>
                     <tbody>
                         {% for post in blogs %}
-                        <tr>
+                        <tr id="blog-row-{{ post.id }}">
                             <td class="py-3 px-4">
                                 <span class="text-muted small">{{ post.created_at[:10] if post.created_at else 'N/A'
                                     }}</span>
                             </td>
                             <td class="py-3 px-4 fw-bold text-dark">{{ post.title }}</td>
                             <td class="py-3 px-4">
-                                {% if post.published %}
-                                <span class="badge bg-muted text-primary border rounded-0 px-3">Published</span>
-                                {% else %}
-                                <span class="badge bg-light text-muted border rounded-0 px-3">Draft</span>
-                                {% endif %}
+                                <span id="status-{{ post.id }}"
+                                    class="badge {{ 'bg-muted text-primary border' if post.published else 'bg-light text-muted border' }} rounded-0 px-3"
+                                    style="cursor:pointer;" onclick="togglePublish('{{ post.id }}')"
+                                    title="Click to toggle">
+                                    {{ 'Published' if post.published else 'Draft' }}
+                                </span>
                             </td>
                             <td class="py-3 px-4">
                                 <div class="btn-group">
-                                    <a href="#" class="btn btn-sm btn-outline"><i class="bi bi-pencil"></i></a>
-                                    <button class="btn btn-sm btn-outline text-danger border-danger ms-2"><i
-                                            class="bi bi-trash"></i></button>
+                                    <a href="/dashboard/blogs/edit/{{ post.id }}" class="btn btn-sm btn-outline"
+                                        title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-outline text-danger border-danger ms-2"
+                                        onclick="deleteBlog('{{ post.id }}', '{{ post.title }}')" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -60,4 +66,133 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h6 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Deletion</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Are you sure you want to permanently delete <strong id="deleteTitle"></strong>?</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger btn-sm" id="confirmDeleteBtn">
+                    <i class="bi bi-trash me-1"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let deleteModal;
+    let pendingDeleteId = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
+            if (!pendingDeleteId) return;
+
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Deleting...';
+
+            try {
+                const response = await fetch(`/dashboard/blogs/delete/${pendingDeleteId}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (response.ok) {
+                    const row = document.getElementById(`blog-row-${pendingDeleteId}`);
+                    if (row) row.remove();
+                    deleteModal.hide();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to delete'));
+                }
+            } catch (error) {
+                alert('Network error while deleting.');
+            } finally {
+                this.disabled = false;
+                this.innerHTML = '<i class="bi bi-trash me-1"></i> Delete';
+                pendingDeleteId = null;
+            }
+        });
+    });
+
+    function deleteBlog(id, title) {
+        pendingDeleteId = id;
+        document.getElementById('deleteTitle').textContent = title;
+        deleteModal.show();
+    }
+
+    async function togglePublish(id) {
+        const badge = document.getElementById(`status-${id}`);
+        const original = badge.innerHTML;
+        badge.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+        try {
+            const response = await fetch(`/dashboard/blogs/toggle/${id}`, { method: 'POST' });
+            const data = await response.json();
+
+            if (response.ok) {
+                badge.textContent = data.published ? 'Published' : 'Draft';
+                badge.className = `badge ${data.published ? 'bg-muted text-primary border' : 'bg-light text-muted border'} rounded-0 px-3`;
+                badge.style.cursor = 'pointer';
+            } else {
+                badge.innerHTML = original;
+                alert('Error: ' + (data.error || 'Failed to toggle'));
+            }
+        } catch (error) {
+            badge.innerHTML = original;
+            alert('Network error while toggling status.');
+        }
+    }
+</script>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .custom-table {
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+    .custom-table tr td {
+        background: #f8f9fa;
+        border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.2s ease;
+    }
+
+    .custom-table tr:hover td {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transform: scale(1.005);
+    }
+
+    .custom-table td:first-child {
+        border-left: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-radius: 8px 0 0 8px;
+    }
+
+    .custom-table td:last-child {
+        border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .custom-table thead th {
+        border-bottom: none;
+        color: var(--secondary-color);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+</style>
 {% endblock %}

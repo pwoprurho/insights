@@ -11,7 +11,8 @@
                 <h5 class="mb-0">Structural Inquiry Master List</h5>
                 <div>
                     <span class="text-muted small me-3">Total Inquiries: {{ bookings|length }}</span>
-                    <button class="btn btn-sm btn-outline"><i class="bi bi-download me-1"></i> Export Data</button>
+                    <a href="{{ url_for('export_bookings') }}" class="btn btn-sm btn-outline"><i
+                            class="bi bi-download me-1"></i> Export Data</a>
                 </div>
             </div>
 

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — Insight Collective{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <!-- Back Link -->
+                <a href="{{ url_for('insights') }}" class="text-muted text-decoration-none small d-inline-block mb-4">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Research & Insights
+                </a>
+
+                <!-- Featured Image -->
+                {% if post.image_url %}
+                <div class="mb-4" style="border-radius: 4px; overflow: hidden;">
+                    <img src="{{ post.image_url }}" alt="{{ post.title }}" class="img-fluid w-100"
+                        style="max-height: 450px; object-fit: cover;">
+                </div>
+                {% endif %}
+
+                <!-- Meta -->
+                <div class="mb-3">
+                    <span class="card-tag">Research & Intelligence</span>
+                </div>
+
+                <!-- Title -->
+                <h1 class="mb-3" style="font-size: 2.5rem; line-height: 1.2;">{{ post.title }}</h1>
+
+                <!-- Date -->
+                <p class="text-muted small mb-5">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    {{ post.created_at[:10] if post.created_at else '' }}
+                </p>
+
+                <!-- Divider -->
+                <hr class="mb-5" style="border-color: var(--border-light);">
+
+                <!-- Content -->
+                <article class="blog-content" style="font-size: 1.1rem; line-height: 1.85; color: #333;">
+                    {{ post.content|safe }}
+                </article>
+
+                <!-- Bottom Divider -->
+                <hr class="my-5" style="border-color: var(--border-light);">
+
+                <!-- CTA -->
+                <div class="text-center py-4">
+                    <p class="text-muted mb-3">Interested in how this intelligence applies to your business?</p>
+                    <a href="{{ url_for('booking') }}" class="btn btn-primary">Start the Diagnostic Process</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_styles %}
+<style>
+    .blog-content h1,
+    .blog-content h2,
+    .blog-content h3,
+    .blog-content h4 {
+        color: var(--primary-navy);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .blog-content p {
+        margin-bottom: 1.25rem;
+    }
+
+    .blog-content blockquote {
+        border-left: 4px solid var(--accent-blue);
+        padding: 1rem 1.5rem;
+        margin: 2rem 0;
+        background: var(--bg-off-white);
+        font-style: italic;
+        color: #555;
+    }
+
+    .blog-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        margin: 1.5rem 0;
+    }
+
+    .blog-content ul,
+    .blog-content ol {
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+    }
+
+    .blog-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-content pre {
+        background: #1a1a2e;
+        color: #e0e0e0;
+        padding: 1.5rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
+
+    .blog-content a {
+        color: var(--accent-blue);
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+{% endblock %}

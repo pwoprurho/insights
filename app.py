@@ -1,5 +1,7 @@
 import os
 import uuid
+import csv
+import io
 from dotenv import load_dotenv
 
 # Load environment variables early
@@ -28,7 +30,7 @@ def get_gemini_client():
     return _gemini_client
 
 # Allowed public endpoints
-PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'insights', 'contact', 'booking', 'login', 'forgot_password', 'static', 'chat', 'health']
+PUBLIC_ENDPOINTS = ['home', 'about', 'services', 'insights', 'blog_detail', 'contact', 'booking', 'login', 'forgot_password', 'static', 'chat', 'health']
 
 @app.before_request
 def require_login():
@@ -68,6 +70,18 @@ def insights():
         blog_posts = []
         print(f"Error fetching blogs for insights: {e}")
     return render_template('insights.html', blogs=blog_posts)
+
+@app.route('/insights/<slug>')
+def blog_detail(slug):
+    try:
+        from supabase_client import supabase
+        res = supabase.table("blogs").select("*").eq("slug", slug).eq("published", True).execute()
+        if res.data and len(res.data) > 0:
+            return render_template('blog_detail.html', post=res.data[0])
+    except Exception as e:
+        print(f"Error fetching blog detail: {e}")
+    flash("Blog post not found.", "warning")
+    return redirect(url_for('insights'))
 
 @app.route('/contact')
 def contact():
@@ -181,21 +195,30 @@ def upload_blog_image():
     
     try:
         from supabase_client import supabase
-        # Use singleton supabase client
         # Generate a unique filename
-        unique_name = f"blog-images/{uuid.uuid4().hex}.{ext}"
-        file_bytes = file.read()
+        filename = f"{uuid.uuid4().hex}.{ext}"
         
-        # Upload to Supabase Storage bucket 'blog-assets'
+        # 1. Local Fallback (always save a copy locally in case Supabase fails)
+        # local_dir = os.path.join(app.root_path, 'static', 'uploads', 'blog-images')
+        # os.makedirs(local_dir, exist_ok=True)
+        # local_path = os.path.join(local_dir, filename)
+        # file.seek(0)
+        # file.save(local_path)
+        
+        # Default to local URL
+        # public_url = url_for('static', filename=f'uploads/blog-images/{filename}', _external=True)
+        
+        # 2. Try Supabase Storage
+        file.seek(0)
+        file_bytes = file.read()
         res = supabase.storage.from_('blog-assets').upload(
-            path=unique_name,
+            path=filename,
             file=file_bytes,
             file_options={"content-type": file.content_type}
         )
-        
-        # Get public URL
-        public_url = supabase.storage.from_('blog-assets').get_public_url(unique_name)
-        
+        # If successful, use the Supabase public URL instead
+        public_url = supabase.storage.from_('blog-assets').get_public_url(filename)
+            
         return jsonify({"url": public_url})
     except Exception as e:
         print(f"Image upload error: {e}")
@@ -235,6 +258,102 @@ def save_blog():
     except Exception as e:
         print(f"Blog save error: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/dashboard/blogs/edit/<blog_id>')
+def edit_blog(blog_id):
+    try:
+        from supabase_client import supabase
+        res = supabase.table("blogs").select("*").eq("id", blog_id).execute()
+        if res.data and len(res.data) > 0:
+            return render_template('dashboard/blog_editor.html', blog=res.data[0])
+    except Exception as e:
+        print(f"Error fetching blog for edit: {e}")
+    flash("Blog post not found.", "danger")
+    return redirect(url_for('blogs'))
+
+@app.route('/dashboard/blogs/update', methods=['POST'])
+def update_blog():
+    data = request.get_json()
+    blog_id = data.get('id')
+    title = data.get('title', '').strip()
+    content = data.get('content', '').strip()
+    slug = data.get('slug', '').strip()
+    featured_image = data.get('featured_image', '').strip()
+    image_position = data.get('image_position', 'top')
+    published = data.get('published', False)
+    
+    if not blog_id or not title or not content:
+        return jsonify({"error": "ID, title and content are required"}), 400
+    
+    try:
+        from supabase_client import supabase
+        blog_data = {
+            "title": title,
+            "slug": slug,
+            "content": content,
+            "image_url": featured_image,
+            "published": published
+        }
+        res = supabase.table("blogs").update(blog_data).eq("id", blog_id).execute()
+        return jsonify({"success": True, "slug": slug, "data": res.data})
+    except Exception as e:
+        print(f"Blog update error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/dashboard/blogs/delete/<blog_id>', methods=['POST'])
+def delete_blog(blog_id):
+    try:
+        from supabase_client import supabase
+        supabase.table("blogs").delete().eq("id", blog_id).execute()
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Blog delete error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/dashboard/blogs/toggle/<blog_id>', methods=['POST'])
+def toggle_blog(blog_id):
+    try:
+        from supabase_client import supabase
+        # Fetch current status
+        res = supabase.table("blogs").select("published").eq("id", blog_id).execute()
+        if not res.data:
+            return jsonify({"error": "Blog not found"}), 404
+        current = res.data[0]['published']
+        # Toggle
+        supabase.table("blogs").update({"published": not current}).eq("id", blog_id).execute()
+        return jsonify({"success": True, "published": not current})
+    except Exception as e:
+        print(f"Blog toggle error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/dashboard/bookings/export')
+def export_bookings():
+    from booking_data import load_bookings
+    bookings = load_bookings()
+    
+    si = io.StringIO()
+    writer = csv.writer(si)
+    writer.writerow(['Date', 'Name', 'Email', 'Phone', 'Company', 'Service', 'Challenge', 'Timeline', 'Source'])
+    for b in bookings:
+        writer.writerow([
+            b.get('created_at', '')[:10] if b.get('created_at') else '',
+            b.get('name', ''),
+            b.get('email', ''),
+            b.get('phone_number', ''),
+            b.get('company', ''),
+            b.get('service', ''),
+            b.get('challenge', ''),
+            b.get('timeline', ''),
+            b.get('source', '')
+        ])
+    
+    output = si.getvalue()
+    from flask import Response
+    return Response(
+        output,
+        mimetype='text/csv',
+        headers={'Content-Disposition': 'attachment; filename=bookings_export.csv'}
+    )
 
 
 @app.route('/login', methods=['GET', 'POST'])
