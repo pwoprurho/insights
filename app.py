@@ -199,14 +199,14 @@ def upload_blog_image():
         filename = f"{uuid.uuid4().hex}.{ext}"
         
         # 1. Local Fallback (always save a copy locally in case Supabase fails)
-        # local_dir = os.path.join(app.root_path, 'static', 'uploads', 'blog-images')
-        # os.makedirs(local_dir, exist_ok=True)
-        # local_path = os.path.join(local_dir, filename)
-        # file.seek(0)
-        # file.save(local_path)
+        local_dir = os.path.join(app.root_path, 'static', 'uploads', 'blog-images')
+        os.makedirs(local_dir, exist_ok=True)
+        local_path = os.path.join(local_dir, filename)
+        file.seek(0)
+        file.save(local_path)
         
         # Default to local URL
-        # public_url = url_for('static', filename=f'uploads/blog-images/{filename}', _external=True)
+        public_url = url_for('static', filename=f'uploads/blog-images/{filename}', _external=True)
         
         # 2. Try Supabase Storage
         file.seek(0)
