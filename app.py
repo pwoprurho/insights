@@ -363,13 +363,6 @@ def login():
         password = request.form.get('password')
         
         try:
-            # Local Development Fallback
-            if email == "akporurho@proton.me" and password == "@mure3nny":
-                session['logged_in'] = True
-                session['user_id'] = 'dev-admin-id'
-                flash("Logged in via Development Fallback (Supabase Unreachable)", "info")
-                return redirect(url_for('view_bookings'))
-
             from supabase_client import supabase
             # Use singleton supabase client
             res = supabase.auth.sign_in_with_password({"email": email, "password": password})
@@ -380,18 +373,6 @@ def login():
                 next_url = request.args.get('next')
                 return redirect(next_url or url_for('view_bookings'))
         except Exception as e:
-            # Emergency Fallback if Supabase fails (DNS/Offline)
-            error_msg = str(e).lower()
-            if "getaddrinfo" in error_msg or "dns" in error_msg or "network is unreachable" in error_msg:
-                if email == "akporurho@proton.me" and password == "@mure3nny":
-                    session['logged_in'] = True
-                    session['user_id'] = 'dev-admin-id'
-                    flash("Logged in via Emergency Fallback (DNS Failure Detected)", "warning")
-                    return redirect(url_for('view_bookings'))
-                else:
-                    flash("Network Error: Supabase is unreachable. You must use the developer fallback account (akporurho@proton.me / @mure3nny) to log in.", "danger")
-                    return redirect(url_for('login'))
-                
             flash(f"Login failed: {str(e)}", "danger")
             print(f"Login error: {e}")
             
@@ -409,12 +390,6 @@ def register():
             flash("New admin registered successfully! They must confirm their email before logging in.", "success")
             return redirect(url_for('register'))
         except Exception as e:
-            # Emergency Fallback if Supabase fails (DNS/Offline)
-            error_msg = str(e).lower()
-            if "getaddrinfo" in error_msg or "dns" in error_msg or "network is unreachable" in error_msg:
-                flash("Network Error: Registration simulated via DNS Fallback because Supabase is unreachable.", "info")
-                return redirect(url_for('register'))
-                
             flash(f"Register failed: {str(e)}", "danger")
             print(f"Registration error: {e}")
             
@@ -431,11 +406,6 @@ def forgot_password():
             flash("If that email exists, a reset link has been sent.", "success")
             return redirect(url_for('login'))
         except Exception as e:
-            # Emergency Fallback if Supabase fails (DNS/Offline)
-            if "getaddrinfo" in str(e).lower() or "dns" in str(e).lower():
-                flash("Password reset email simulated via DNS Fallback. Check your local logs.", "info")
-                return redirect(url_for('login'))
-                
             flash(f"Error requesting password reset: {e}", "error")
             print(f"Password reset error: {e}")
             
