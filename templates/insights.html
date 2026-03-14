@@ -18,8 +18,9 @@
         <div class="row mb-5 pb-5 border-bottom border-light">
             <div class="col-lg-6 mb-4 mb-lg-0">
                 {% if blogs[0].image_url %}
-                <div class="img-placeholder bg-light mb-4"
-                    style="height: 400px; background-image: url('{{ blogs[0].image_url }}'); background-size: cover; background-position: center; border-radius: 8px;">
+                <div class="featured-image-container mb-4" style="border-radius: 8px; overflow: hidden;">
+                    <img src="{{ blogs[0].image_url }}" alt="{{ blogs[0].title }}" class="img-fluid w-100" 
+                         style="height: auto; display: block;">
                 </div>
                 {% else %}
                 <div class="img-placeholder bg-light mb-4"

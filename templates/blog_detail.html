@@ -15,9 +15,9 @@
 
                 <!-- Featured Image -->
                 {% if post.image_url %}
-                <div class="mb-4" style="border-radius: 4px; overflow: hidden;">
+                <div class="mb-5" style="border-radius: 4px; overflow: hidden; background: var(--bg-off-white);">
                     <img src="{{ post.image_url }}" alt="{{ post.title }}" class="img-fluid w-100"
-                        style="max-height: 450px; object-fit: cover;">
+                        style="height: auto;">
                 </div>
                 {% endif %}
 
