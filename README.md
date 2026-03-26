@@ -1,6 +1,5 @@
-# Fadav Elite Group Cleaning Service Website
 
-This is a modern website for fadavelitegroup.com, a cleaning service business, built with Flask and Bootstrap.
+This is a modern website for corporate organizations implementing a simple flask server, a cleaning service business, built with Flask and Bootstrap.
 
 ## Features
 - Homepage
